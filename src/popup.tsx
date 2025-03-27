@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client"
 import "./config.ts"
 import { useTranslation } from "react-i18next"
 import {useChromeStorageLocal} from 'use-chrome-storage'
+import "./popup.css"
 
 const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     const [count, setCount] = useState<number>(0)
@@ -43,6 +44,11 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }, [])
 
+    // Check if the current tab is web4.bip.com
+    const isWeb4Bip = (): boolean => {
+        return currentTab?.url?.includes('web4.bip.com') || false
+    }
+
     const insertCSSDirectly = (styleId: string, cssRules: string): void => {
         console.log("Started insertCSSDirectly")
         const existingStyle = document.getElementById(styleId)
@@ -68,9 +74,22 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleMessages
-    const messagesCSS = `
+    const messagesCSS = isWeb4Bip() 
+    ? `
+    /* CSS selectors for web4.bip.com */
+    div[class^="_textBubble__card_info__message_container_"], span[class^="_itemWrapper_"]  {
+        filter: blur(${settings.varStyles.msBlur}px) grayscale(1) !important;
+    }
+    .message:hover, .chat-message:hover, .message-content:hover, .message-text:hover, .message-body:hover {
+        filter: blur(0) grayscale(0) !important;
+    }
+    `
+    : `
     .eXKgZM4Ydwjk2iheJ3xYJQ\\=\\=, .bEAiavpalHAUgqQjBWUttA\\=\\=, ._90RvQvD8zmqqqKvDqsMLqQ\\=\\=, .wTN1sxCb\\+VqwKVUzbvVflA\\=\\=, ._3IAu8PIev8b5aMag6SnPmw\\=\\= {
         filter: blur(${settings.varStyles.msBlur}px) grayscale(1) !important;
+    }
+    .eXKgZM4Ydwjk2iheJ3xYJQ\\=\\=:hover, .bEAiavpalHAUgqQjBWUttA\\=\\=:hover, ._90RvQvD8zmqqqKvDqsMLqQ\\=\\=:hover, .wTN1sxCb\\+VqwKVUzbvVflA\\=\\=:hover, ._3IAu8PIev8b5aMag6SnPmw\\=\\=:hover {
+        filter: blur(0) grayscale(0) !important;
     }
     `;
     const _toggleMessages = (status: boolean): void => {
@@ -104,10 +123,24 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleMessagesPreview
-    const messagesPreviewCSS = `
+    const messagesPreviewCSS = isWeb4Bip() 
+    ? `
+    /* CSS selectors for web4.bip.com */
+    .message-preview, .preview-text, .chat-preview, .preview-content {
+      filter: blur(${settings.varStyles.mspBlur}px) grayscale(1);
+      transition-delay: 0s;
+    }
+    .message-preview:hover, .preview-text:hover, .chat-preview:hover, .preview-content:hover {
+      filter: blur(0) grayscale(0);
+    }
+    `
+    : `
     ._0kv113w-tlp6u3ctDSjI9Q\\=\\= {
       filter: blur(${settings.varStyles.mspBlur}px) grayscale(1);
       transition-delay: 0s;
+    }
+    ._0kv113w-tlp6u3ctDSjI9Q\\=\\=:hover {
+      filter: blur(0) grayscale(0);
     }
     `;
     const _toggleMessagesPreview = (status: boolean): void => {
@@ -142,9 +175,28 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleMediaPreview
-    const mediaPreviewCSS = `
+    const mediaPreviewCSS = isWeb4Bip() 
+    ? `
+    /* CSS selectors for web4.bip.com */
+    .media-preview, .image-preview, .video-preview, .attachment-preview, img, video {
+      filter: blur(${settings.varStyles.mdpBlur}px) grayscale(1);
+      transition: initial;
+      transition-delay: 0s;
+    }
+    .media-preview:hover, .image-preview:hover, .video-preview:hover, .attachment-preview:hover, img:hover, video:hover {
+      filter: blur(0) grayscale(0);
+      transition: initial;
+      transition-delay: 0s;
+    }
+    `
+    : `
     .image-element.bubble.display {
       filter: blur(${settings.varStyles.mdpBlur}px) grayscale(1);
+      transition: initial;
+      transition-delay: 0s;
+    }
+    .image-element.bubble.display:hover {
+      filter: blur(0) grayscale(0);
       transition: initial;
       transition-delay: 0s;
     }
@@ -181,9 +233,22 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleTextInputDescription
-    const textInputDescriptionCSS = `
+    const textInputDescriptionCSS = isWeb4Bip() 
+    ? `
+    /* CSS selectors for web4.bip.com */
+    .text-input, .message-input, .chat-input, textarea, input[type="text"], editor-paragraph, .editor-paragraph, #editor-paragraph {
+      filter: blur(8px) opacity(0.25);
+    }
+    .text-input:hover, .message-input:hover, .chat-input:hover, textarea:hover, input[type="text"]:hover {
+      filter: blur(0) opacity(1);
+    }
+    `
+    : `
     p.selectable-text.copyable-text.x15bjb6t.x1n2onr6 {
       filter: blur(8px) opacity(0.25);
+    }
+    p.selectable-text.copyable-text.x15bjb6t.x1n2onr6:hover {
+      filter: blur(0) opacity(1);
     }
     `;
     const _toggleTextInputDescription = (status: boolean): void => {
@@ -218,9 +283,25 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleMediaGalleryDescription
-    const profilePicDescriptionCSS = `
+    const profilePicDescriptionCSS = isWeb4Bip() 
+    ? `
+    /* CSS selectors for web4.bip.com */
+    .profile-pic, .avatar, .user-avatar, .profile-image, .user-pic, .user-image {
+      filter: blur(${settings.varStyles.ppBlur}px) grayscale(1);
+      transition-delay: 0s;
+    }
+    .profile-pic:hover, .avatar:hover, .user-avatar:hover, .profile-image:hover, .user-pic:hover, .user-image:hover {
+      filter: blur(0) grayscale(0);
+      transition-delay: 0s;
+    }
+    `
+    : `
     img.HXaAiLkvrq44mN9RG2\\+rqw\\=\\=, .p-avatar {
       filter: blur(${settings.varStyles.ppBlur}px) grayscale(1);
+      transition-delay: 0s;
+    }
+    img.HXaAiLkvrq44mN9RG2\\+rqw\\=\\=:hover, .p-avatar:hover {
+      filter: blur(0) grayscale(0);
       transition-delay: 0s;
     }
     `;
@@ -255,9 +336,25 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleNameDescription
-    const nameDescriptionCSS = `
+    const nameDescriptionCSS = isWeb4Bip() 
+    ? `
+    /* CSS selectors for web4.bip.com */
+    .user-name, .username, .display-name, .chat-name, .contact-name, .name {
+      filter: blur(${settings.varStyles.nmBlur}px) grayscale(1);
+      transition-delay: 0s;
+    }
+    .user-name:hover, .username:hover, .display-name:hover, .chat-name:hover, .contact-name:hover, .name:hover {
+      filter: blur(0) grayscale(0);
+      transition-delay: 0s;
+    }
+    `
+    : `
     .i0NU-Cd1bsGmwNecf9i95g\\=\\= {
       filter: blur(${settings.varStyles.nmBlur}px) grayscale(1);
+      transition-delay: 0s;
+    }
+    .i0NU-Cd1bsGmwNecf9i95g\\=\\=:hover {
+      filter: blur(0) grayscale(0);
       transition-delay: 0s;
     }
     `;
@@ -293,12 +390,55 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleNoDelayDescription
-    const noDelayDescriptionCSS = `
+    const noDelayDescriptionCSS = isWeb4Bip() 
+    ? `
+    /* CSS selectors for web4.bip.com */
+    .message:hover, 
+    .chat-message:hover, 
+    .message-content:hover, 
+    .message-text:hover, 
+    .message-body:hover,
+    .message-preview:hover, 
+    .preview-text:hover, 
+    .chat-preview:hover, 
+    .preview-content:hover,
+    .media-preview:hover, 
+    .image-preview:hover, 
+    .video-preview:hover, 
+    .attachment-preview:hover, 
+    img:hover, 
+    video:hover,
+    .text-input:hover, 
+    .message-input:hover, 
+    .chat-input:hover, 
+    textarea:hover, 
+    input[type="text"]:hover,
+    .profile-pic:hover, 
+    .avatar:hover, 
+    .user-avatar:hover, 
+    .profile-image:hover, 
+    .user-pic:hover, 
+    .user-image:hover,
+    .user-name:hover, 
+    .username:hover, 
+    .display-name:hover, 
+    .chat-name:hover, 
+    .contact-name:hover, 
+    .name:hover
+    {
+      transition-delay: 0.04s !important;
+      -webkit-transition-duration: 0s !important;
+      -moz-transition-duration: 0s !important;
+      -o-transition-duration: 0s !important;
+      transition-duration: 0s !important;
+    }
+    `
+    : `
     /* former wa version (v2.2412.xx) */
     /* mediaGallery */
     .tukmaf4q:hover /*media preview in gallery*/,
     ._1Pr6q:hover /*media preview in send media*/,
-    
+
     /* mediaPreview */
     ._2AOIt div.ktbp76dp div[role="button"]:hover img /*image landscape*/,
     ._2AOIt div.eu4mztcy div[role="button"]:hover img /*image potrait*/,
@@ -312,16 +452,16 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     .kknmh:hover /*media reply thumb*/,
     ._2MmTH:hover /*media send preview*/,
     .ZRhsD._2foMf:hover /*Sticker*/,
-    
+
     /* messages */
     ._2AOIt:hover div:first-child /*normal message*/,
     ._3cupO:hover /*link list message*/,
     ._1qNn2 ._1nCcB:hover /*sticker*/,
     ._1BOF7 ._1sykI:hover /*blue info bar*/,
-    
+
     /* messagesPreview */
     .vQ0w7:hover /*message preview*/,
-    
+
     /* name */
     div:not([role]) > div:not([role]) > ._8nE1Y ._21S-L:hover /*user/group name in search message*/,
     div[role="row"] > div > ._8nE1Y ._21S-L:hover /*user/group name in message list*/,
@@ -336,7 +476,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     ._3IzYj:hover /*Message in chat*/,
     .Efdtr:hover /* name in contact attachment */,
     .djhxrpsl:hover /* name in multi contact attachment */,
-    
+
     /* profilePic */
     [role="row"] > div > ._1AHcd ._13jwn:hover /*profile pic message list*/,
     [role="button"] > div > ._1AHcd ._13jwn:hover /*profile pic non message list*/,
@@ -349,16 +489,16 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     .pz0xruzv:hover /*Details direct profile pic*/,
     .njub1g37 ._3xH7K:hover /*Details group profile pic*/,
     .njub1g37 .kk3akd72.claouzo6:hover /*Starred message profile pic*/,
-    
+
     /* textInput */
     ._3Uu1_:hover /*textarea*/,
-    
+
     /* updated wa version (v2.3000.xx) */
     /* mediaGallery */
     div._ajuf._ajuh._ajug > div:hover /* media in overlay view */,
     div.x1conndi:hover /* media thumb in overlay view and details panel */,
     div.x4t2iug:hover /* media thumb in media gallery panel */,
-    
+
     /* mediaPreview */
     div._amk4 > ._amk6 :is(div, button)[role="button"]:not(.x13yyeie, ._ak3u, [data-js-context-icon], .x1a06ls3):hover /* media messages in chat panel (also quoted message and contact attachment button) */,
     div._ak4o:hover /* voice note / audio in chat panel */,
@@ -369,14 +509,14 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     div._ajwt > div:first-child > div:nth-child(2) > div:hover /* media preview in send media */,
     div._ak3i:hover /* media preview thumb in send media */,
     div._ajwt .xm0mufa > div:hover /* document filename in send media */,
-    
+
     /* messages */
     div._amk4 > ._amk6:hover /* normal message text */,
     div._amk4 ._am2s:hover /* sticker message */,
-    
+
     /* messagesPreview */
     div._ak8k:hover /* message preview */,
-    
+
     /* name */
     div[role="listitem"] ._ak8q:hover /* user/group name in message list */,
     div[role="button"][class=""] ._ak8q:hover /* user/group name in details list and popup list */,
@@ -400,7 +540,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     div.xkhd6sd:not([role]) > ._ajxu > div:hover /* business about in details info */,
     div.xkhd6sd._ajxt > ._ajxu > div:hover /* business phone number in details info */,
     div._ak1d > div:first-child > div:first-child > :not(:first-child):hover /* user/group name in starred message list */,
-    
+
     /* profilePic */
     div[role="listitem"] ._ak8h:hover /* user/group profile pic in message list */,
     div[role="button"][class=""] ._ak8h:hover /* user/group profile pic in details list and popup list */,
@@ -418,7 +558,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     div._amje:hover /* group profile pic in details panel */,
     div.overlay ._am0k:hover /* user/group profile pic overlay view */,
     div.x1okw0bk.x1w0mnb:hover /* user profile pic in starred message list */,
-    
+
     /* textInput */
     div._ak1l:hover /* message text input */
     {
@@ -460,13 +600,53 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }
 
-    // toggleNoDelayDescription
-    const unblurActiveDescriptionCSS = `
+    // toggleUnblurActiveDescription
+    const unblurActiveDescriptionCSS = isWeb4Bip() 
+    ? `
+    /* CSS selectors for web4.bip.com */
+    body:hover .message, 
+    body:hover .chat-message, 
+    body:hover .message-content, 
+    body:hover .message-text, 
+    body:hover .message-body,
+    body:hover .message-preview, 
+    body:hover .preview-text, 
+    body:hover .chat-preview, 
+    body:hover .preview-content,
+    body:hover .media-preview, 
+    body:hover .image-preview, 
+    body:hover .video-preview, 
+    body:hover .attachment-preview, 
+    body:hover img, 
+    body:hover video,
+    body:hover .text-input, 
+    body:hover .message-input, 
+    body:hover .chat-input, 
+    body:hover textarea, 
+    body:hover input[type="text"],
+    body:hover .profile-pic, 
+    body:hover .avatar, 
+    body:hover .user-avatar, 
+    body:hover .profile-image, 
+    body:hover .user-pic, 
+    body:hover .user-image,
+    body:hover .user-name, 
+    body:hover .username, 
+    body:hover .display-name, 
+    body:hover .chat-name, 
+    body:hover .contact-name, 
+    body:hover .name
+    {
+      filter: blur(0) grayscale(0);
+      transition-delay: 0s;
+    }
+    `
+    : `
     /* former wa version (v2.2412.xx) */
     /* mediaGallery */
     body:hover .tukmaf4q /*media preview in gallery*/,
     body:hover ._1Pr6q /*media preview in send media*/,
-    
+
     /* mediaPreview */
     body:hover ._2AOIt div.ktbp76dp div[role="button"] img /*image landscape*/,
     body:hover ._2AOIt div.eu4mztcy div[role="button"] img /*image potrait*/,
@@ -480,16 +660,16 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     body:hover .kknmh /*media reply thumb*/,
     body:hover ._2MmTH /*media send preview*/,
     body:hover .ZRhsD._2foMf /*Sticker*/,
-    
+
     /* messages */
     body:hover ._2AOIt div:first-child /*normal message*/,
     body:hover ._3cupO /*link list message*/,
     body:hover ._1qNn2 ._1nCcB /*sticker*/,
     body:hover ._1BOF7 ._1sykI /*blue info bar*/,
-    
+
     /* messagesPreview */
     body:hover .vQ0w7 /*message preview*/,
-    
+
     /* name */
     body:hover div:not([role]) > div:not([role]) > ._8nE1Y ._21S-L /*user/group name in search message*/,
     body:hover div[role="row"] > div > ._8nE1Y ._21S-L /*user/group name in message list*/,
@@ -504,7 +684,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     body:hover ._3IzYj /*Message in chat*/,
     body:hover .Efdtr /* name in contact attachment */,
     body:hover .djhxrpsl /* name in multi contact attachment */,
-    
+
     /* profilePic */
     body:hover [role="row"] > div > ._1AHcd ._13jwn /*profile pic message list*/,
     body:hover [role="button"] > div > ._1AHcd ._13jwn /*profile pic non message list*/,
@@ -517,13 +697,13 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     body:hover .pz0xruzv /*Details direct profile pic*/,
     body:hover .njub1g37 ._3xH7K /*Details group profile pic*/,
     body:hover .njub1g37 .kk3akd72.claouzo6 /*Starred message profile pic*/,
-    
+
     /* updated wa version (v2.3000.xx) */
     /* mediaGallery */
     body:hover div._ajuf._ajuh._ajug > div /* media in overlay view */,
     body:hover div.x1conndi /* media thumb in overlay view and details panel */,
     body:hover div.x4t2iug /* media thumb in media gallery panel */,
-    
+
     /* mediaPreview */
     body:hover div._amk4 > ._amk6 :is(div, button)[role="button"]:not(.x13yyeie, ._ak3u, [data-js-context-icon], .x1a06ls3) /* media messages in chat panel (also quoted message and contact attachment button) */,
     body:hover div._ak4o /* voice note / audio in chat panel */,
@@ -534,14 +714,14 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     body:hover div._ajwt > div:first-child > div:nth-child(2) > div /* media preview in send media */,
     body:hover div._ak3i /* media preview thumb in send media */,
     body:hover div._ajwt .xm0mufa > div /* document filename in send media */,
-    
+
     /* messages */
     body:hover div._amk4 > ._amk6 /* normal message text */,
     body:hover div._amk4 ._am2s /* sticker message */,
-    
+
     /* messagesPreview */
     body:hover div._ak8k /* message preview */,
-    
+
     /* name */
     body:hover div[role="listitem"] ._ak8q /* user/group name in message list */,
     body:hover div[role="button"][class=""] ._ak8q /* user/group name in details list and popup list */,
@@ -565,7 +745,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     body:hover div.xkhd6sd:not([role]) > ._ajxu > div /* business about in details info */,
     body:hover div.xkhd6sd._ajxt > ._ajxu > div /* business phone number in details info */,
     body:hover div._ak1d > div:first-child > div:first-child > :not(:first-child) /* user/group name in starred message list */,
-    
+
     /* profilePic */
     body:hover div[role="listitem"] ._ak8h /* user/group profile pic in message list */,
     body:hover div[role="button"][class=""] ._ak8h /* user/group profile pic in details list and popup list */,
@@ -587,11 +767,11 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
       filter: blur(0) grayscale(0);
       transition-delay: 0s;
     }
-    
+
     /* former wa version (v2.2412.xx) */
     /* textInput */
     body:hover ._3Uu1_ /*textarea*/,
-    
+
     /* updated wa version (v2.3000.xx) */
     /* textInput */
     div._ak1l:hover /* message text input */
@@ -631,19 +811,33 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }
 
-    chrome.tabs.onUpdated.addListener(function (tabId , info) {
-        console.log("info.status: " + info.status)
-        if (info.status === 'complete') {
-            _toggleMessages(true)
-            _toggleMessagesPreview(true)
-            _toggleMediaPreview(true)
-            _toggleTextInputDescription(true)
-            _toggleProfilePicDescription(true)
-            _toggleNameDescription(true)
-            _toggleNoDelayDescription(true)
-            _toggleUnblurActiveDescription(true)
-        }
-    })
+    // The chrome.tabs.onUpdated event listener has been moved to background.ts
+    // to ensure CSS is applied even when the popup is closed
+
+    // Add event listeners for reveal buttons to toggle collapsible sections
+    useEffect(() => {
+        const revealButtons = document.querySelectorAll('.reveal-btn');
+
+        revealButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const target = e.currentTarget as HTMLElement;
+                const listItem = target.closest('li');
+                const collapsible = listItem?.querySelector('.collapsible');
+
+                // Toggle the 'show' class on the collapsible element
+                collapsible?.classList.toggle('show');
+
+                // Toggle the 'active' class on the button
+                target.classList.toggle('active');
+            });
+        });
+
+        return () => {
+            revealButtons.forEach(button => {
+                button.removeEventListener('click', () => {});
+            });
+        };
+    }, []);
 
     useEffect(() => {
         // Load settings from chrome.storage.local on page load
@@ -651,28 +845,90 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
             if (result.settings) {
                 setSettings(result.settings); // Update state with stored settings
 
-                if (result.settings.styles.messages) {
-                    // If messages is enabled, apply the CSS
-                    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs: chrome.tabs.Tab[]): void {
-                        const tab: chrome.tabs.Tab = tabs[0];
+                // Check if the current tab is web4.bip.com
+                chrome.tabs.query({ active: true, currentWindow: true }, function (tabs: chrome.tabs.Tab[]): void {
+                    const tab: chrome.tabs.Tab = tabs[0];
+                    if (tab.url && tab.url.includes('web4.bip.com')) {
+                        console.log("Applying CSS to web4.bip.com from stored settings");
                         const tabId: number = tab.id!;
-                        chrome.scripting.executeScript({
-                            target: { tabId },
-                            func: insertCSSDirectly,
-                            args: ["toggleMessages", messagesCSS]
-                        });
-                    });
-                }
+
+                        // Apply CSS based on stored settings
+                        if (result.settings.styles.messages) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: insertCSSDirectly,
+                                args: ["toggleMessages", messagesCSS]
+                            });
+                        }
+
+                        if (result.settings.styles.messagesPreview) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: insertCSSDirectly,
+                                args: ["toggleMessagesPreview", messagesPreviewCSS]
+                            });
+                        }
+
+                        if (result.settings.styles.mediaPreview) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: insertCSSDirectly,
+                                args: ["toggleMediaPreview", mediaPreviewCSS]
+                            });
+                        }
+
+                        if (result.settings.styles.textInput) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: insertCSSDirectly,
+                                args: ["toggleTextInputDescription", textInputDescriptionCSS]
+                            });
+                        }
+
+                        if (result.settings.styles.profilePic) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: insertCSSDirectly,
+                                args: ["toggleProfilePicDescription", profilePicDescriptionCSS]
+                            });
+                        }
+
+                        if (result.settings.styles.name) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: insertCSSDirectly,
+                                args: ["toggleNameDescription", nameDescriptionCSS]
+                            });
+                        }
+
+                        if (result.settings.styles.noDelay) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: insertCSSDirectly,
+                                args: ["toggleNoDelayDescription", noDelayDescriptionCSS]
+                            });
+                        }
+
+                        if (result.settings.styles.unblurActive) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: insertCSSDirectly,
+                                args: ["toggleUnblurActiveDescription", unblurActiveDescriptionCSS]
+                            });
+                        }
+                    }
+                });
             }
         });
-    }, []); // Empty dependency array to run only on component mount
+    }, [messagesCSS, messagesPreviewCSS, mediaPreviewCSS, textInputDescriptionCSS, profilePicDescriptionCSS, nameDescriptionCSS, noDelayDescriptionCSS, unblurActiveDescriptionCSS]); // Update when CSS changes
 
 
     return (
       <>
+          <div className="header">
+              <h1>{t("extensionSettings")}</h1>
+          </div>
           <div id="mainContent">
-              {JSON.stringify(settings.styles)}
-              <h2 style={{marginTop: '10px', marginBottom: '5px'}}>{t("extensionSettings")}</h2>
               <ul>
                   <li>
                       {t("toggleMessages")}

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
 
-  "name": "Chrome Extension TypeScript Starter",
-  "description": "Chrome Extension, TypeScript, Visual Studio Code",
+  "name": "Bip Web Privacy Extension",
+  "description": "Privacy extension for web4.bip.com that applies blur effects to various elements",
   "version": "1.0",
 
   "options_ui": {
