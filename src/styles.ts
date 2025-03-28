@@ -54,7 +54,9 @@ export const getCSS = (settings: any) => {
     div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"], 
     div[itemtype="messages"] div[class^="_replyContent_"], 
     div[itemtype="messages"] div[class^="_content_"], 
-    div[itemtype="messages"] div[class^="_text_"] {
+    div[itemtype="messages"] div[class^="_text_"],
+    div[class^="_search_messages__search_results__messages__message_card_"]
+    {
         filter: blur(${settings.varStyles.msBlur}px) grayscale(1) !important;
     }
     div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"]:hover, 
@@ -66,7 +68,9 @@ export const getCSS = (settings: any) => {
     div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"]:hover, 
     div[itemtype="messages"] div[class^="_replyContent_"]:hover, 
     div[itemtype="messages"] div[class^="_content_"]:hover, 
-    div[itemtype="messages"] div[class^="_text_"]:hover {
+    div[itemtype="messages"] div[class^="_text_"]:hover,
+    div[class^="_search_messages__search_results__messages__message_card_"]:hover
+    {
         filter: blur(0) grayscale(0) !important;
     }
     `,
@@ -103,21 +107,29 @@ export const getCSS = (settings: any) => {
 
     // Text Input CSS
     textInput: `
-    .text-input, .message-input, .chat-input, textarea, input[type="text"], editor-paragraph, .editor-paragraph, #editor-paragraph {
-      filter: blur(${settings.varStyles.wiBlur}px) opacity(0.25);
+    .editor-paragraph,
+    input
+    {
+      filter: blur(${settings.varStyles.wiBlur}px) grayscale(1);
     }
-    .text-input:hover, .message-input:hover, .chat-input:hover, textarea:hover, input[type="text"]:hover {
-      filter: blur(0) opacity(1);
+    .editor-paragraph:hover,
+    input:hover
+    {
+      filter: blur(0) grayscale(0);
     }
     `,
 
     // Profile Picture CSS
     profilePic: `
-    ._avatar_1vdaa_1 {
+    div[class^="_avatar_"],
+    ._avatar_1vdaa_1
+    {
       filter: blur(${settings.varStyles.ppBlur}px) grayscale(1);
       transition-delay: 0s;
     }
-    ._avatar_1vdaa_1:hover {
+    ._avatar_1vdaa_1:hover,
+    div[class^="_avatar_"]:hover
+    {
       filter: blur(0) grayscale(0);
       transition-delay: 0s;
     }
@@ -128,17 +140,29 @@ export const getCSS = (settings: any) => {
     div[class^="_contact__content__header__name_"],
     span[class^="_message__nick_"],
     div[class^="_username_"],
-    h3[class^="_info_card__title_"]
+    h3[class^="_info_card__title_"],
+    div[class^="_input__actions_"],
+    div[class^="_info_card__members_"],
+    div[class^="_action__informative__row__title_"],
+    div[class^="_action__selectable__row__title_"],
+    div[class^="_action__chip__row__title_"],
+    div[class^="_contact_info__title__user_info__user_name_"]
     {
       filter: blur(${settings.varStyles.nmBlur}px) grayscale(1);
     }
     div[class^="_contact__content__header__name_"]:hover,
     span[class^="_message__nick_"]:hover,
     div[class^="_username_"]:hover,
-    h3[class^="_info_card__title_"]:hover
+    h3[class^="_info_card__title_"]:hover,
+    div[class^="_input__actions_"]:hover,
+    div[class^="_info_card__members_"]:hover,
+    div[class^="_action__informative__row__title_"]:hover,
+    div[class^="_action__selectable__row__title_"]:hover,
+    div[class^="_action__chip__row__title_"]:hover,
+    div[class^="_contact_info__title__user_info__user_name_"]:hover
     {
       filter: blur(0) grayscale(0);
     }
     `,
-  };
-};
+  }
+}
