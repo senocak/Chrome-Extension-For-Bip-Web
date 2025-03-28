@@ -14,7 +14,7 @@ i18n
             en: {
                 translation: {
                     extensionToggle: "Toggle",
-                    extensionSettings: "Settings",
+                    extensionSettings: "Bip Web Privacy Extension",
                     toggleMessages: "All Messages in Chat",
                     blurInputLabel: "Blur amount",
                     toggleMessagesPreview: "Last Messages Preview",
@@ -34,7 +34,7 @@ i18n
             tr: {
                 translation: {
                     extensionToggle: "Aç/Kapat",
-                    extensionSettings: "Ayarlar",
+                    extensionSettings: "Bip Web Privacy Extension",
                     toggleMessages: "Sohbetteki Tüm Mesajlar",
                     blurInputLabel: "Bulanıklık miktarı",
                     toggleMessagesPreview: "Son Mesajlar Önizlemesi",
