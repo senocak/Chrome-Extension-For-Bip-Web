@@ -33,9 +33,9 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
     const [settings, setSettings, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal('settings', defaultSettings);
 
-    //useEffect((): void => {
-    //    chrome.action.setBadgeText({ text: count.toString() })
-    //}, [count])
+    useEffect((): void => {
+        chrome.action.setBadgeText({ text: count.toString() })
+    }, [count])
 
     useEffect((): void => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs: chrome.tabs.Tab[]): void {
@@ -269,30 +269,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }
 
-    // Add event listeners for reveal buttons to toggle collapsible sections
-    useEffect(() => {
-        const revealButtons = document.querySelectorAll('.reveal-btn');
-
-        revealButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const target = e.currentTarget as HTMLElement;
-                const listItem = target.closest('li');
-                const collapsible = listItem?.querySelector('.collapsible');
-
-                // Toggle the 'show' class on the collapsible element
-                collapsible?.classList.toggle('show');
-
-                // Toggle the 'active' class on the button
-                target.classList.toggle('active');
-            });
-        });
-
-        return () => {
-            revealButtons.forEach(button => {
-                button.removeEventListener('click', () => {});
-            });
-        };
-    }, []);
 
     useEffect(() => {
         // Load settings from chrome.storage.local on page load
@@ -376,130 +352,85 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              onChange={(): void => _toggleMessages(!settings.styles.messages)}
                       />
                       <label htmlFor="messages" data-localetitle="toggleMessagesDescription"></label>
-                      <div className="collapsible">
-                          <form className="var-style">
-                              {t("blurInputLabel")}
-                              <button type="reset" data-localetitle="resetValue"
-                                      onClick={(event): void => {
-                                          setSettings(prevSettings => ({
-                                              ...prevSettings,
-                                              varStyles: {...prevSettings.varStyles, msBlur: 8}
-                                          }))
-                                      }}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
-                                          <path stroke-miterlimit="10"
-                                                d="M6.395 7.705A7.885 7.885 0 0 1 12 5.382a7.929 7.929 0 0 1 7.929 7.929A7.94 7.94 0 0 1 12 21.25a7.939 7.939 0 0 1-7.929-7.94"/>
-                                          <path stroke-linejoin="round"
-                                                d="m7.12 2.75l-.95 3.858a1.332 1.332 0 0 0 .97 1.609l3.869.948"/>
-                                      </g>
-                                  </svg>
-                              </button>
-                              <input type="number" name="msBlur" id="msBlur" data-var-name="msBlur"
-                                     value={settings.varStyles.msBlur}
-                                     onChange={(event): void => {
-                                         setSettings(prevSettings => ({
-                                             ...prevSettings,
-                                             varStyles: {...prevSettings.varStyles, msBlur: Number(event.target.value)}
-                                         }))
-                                     }}
-                                     data-localetitle="msBlurInputDescription"/>
-                              <span className="unit">px</span>
-                              <button type="submit" data-localetitle="msBlurInputDescription">✔</button>
-                          </form>
-                      </div>
+                      <input type="number" name="msBlur" id="msBlur" data-var-name="msBlur"
+                             className="blur-input"
+                             value={settings.varStyles.msBlur}
+                             onChange={(event): void => {
+                                 const newValue = Number(event.target.value);
+                                 setSettings(prevSettings => ({
+                                     ...prevSettings,
+                                     varStyles: {...prevSettings.varStyles, msBlur: newValue}
+                                 }));
+
+                                 // Apply changes immediately
+                                 if (settings.styles.messages && currentTab?.url?.includes('web4.bip.com')) {
+                                     const tabId = currentTab.id!;
+                                     chrome.scripting.executeScript({
+                                         target: { tabId },
+                                         func: insertCSSDirectly,
+                                         args: ["toggleMessages", css.messages]
+                                     });
+                                 }
+                             }}
+                             data-localetitle="msBlurInputDescription"/>
                   </li>
                   <li>
                       {t("toggleMessagesPreview")}
-                      <button type="button" className="reveal-btn">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                              <path fill="currentColor"
-                                    d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/>
-                          </svg>
-                      </button>
                       <input type="checkbox" id="messagesPreview" data-style="messagesPreview"
                              checked={settings.styles.messagesPreview}
                              onChange={(): void => _toggleMessagesPreview(!settings.styles.messagesPreview)}
                       />
                       <label htmlFor="messagesPreview" data-localetitle="toggleMessagesPreviewDescription"></label>
-                      <div className="collapsible">
-                          <form className="var-style">
-                              {t("blurInputLabel")}
-                              <button type="reset" data-localetitle="resetValue"
-                                      onClick={(event): void => {
-                                          setSettings(prevSettings => ({
-                                              ...prevSettings,
-                                              varStyles: {...prevSettings.varStyles, mspBlur: 8}
-                                          }))
-                                      }}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
-                                          <path stroke-miterlimit="10"
-                                                d="M6.395 7.705A7.885 7.885 0 0 1 12 5.382a7.929 7.929 0 0 1 7.929 7.929A7.94 7.94 0 0 1 12 21.25a7.939 7.939 0 0 1-7.929-7.94"/>
-                                          <path stroke-linejoin="round"
-                                                d="m7.12 2.75l-.95 3.858a1.332 1.332 0 0 0 .97 1.609l3.869.948"/>
-                                      </g>
-                                  </svg>
-                              </button>
-                              <input type="number" name="mspBlur" id="mspBlur" data-var-name="mspBlur"
-                                     value={settings.varStyles.mspBlur}
-                                     onChange={(event): void => {
-                                         setSettings(prevSettings => ({
-                                             ...prevSettings,
-                                             varStyles: {...prevSettings.varStyles, mspBlur: Number(event.target.value)}
-                                         }))
-                                     }}
-                                     data-localetitle="mspBlurInputDescription"/>
-                              <span className="unit">px</span>
-                              <button type="submit" data-localetitle="mspBlurInputDescription">✔</button>
-                          </form>
-                      </div>
+                      <input type="number" name="mspBlur" id="mspBlur" data-var-name="mspBlur"
+                             className="blur-input"
+                             value={settings.varStyles.mspBlur}
+                             onChange={(event): void => {
+                                 const newValue = Number(event.target.value);
+                                 setSettings(prevSettings => ({
+                                     ...prevSettings,
+                                     varStyles: {...prevSettings.varStyles, mspBlur: newValue}
+                                 }));
+
+                                 // Apply changes immediately
+                                 if (settings.styles.messagesPreview && currentTab?.url?.includes('web4.bip.com')) {
+                                     const tabId = currentTab.id!;
+                                     chrome.scripting.executeScript({
+                                         target: { tabId },
+                                         func: insertCSSDirectly,
+                                         args: ["toggleMessagesPreview", css.messagesPreview]
+                                     });
+                                 }
+                             }}
+                             data-localetitle="mspBlurInputDescription"/>
                   </li>
                   <li>
                       {t("toggleMediaPreview")}
-                      <button type="button" className="reveal-btn">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                              <path fill="currentColor"
-                                    d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/>
-                          </svg>
-                      </button>
                       <input type="checkbox" id="mediaPreview" data-style="mediaPreview"
                              checked={settings.styles.mediaPreview}
                              onChange={(): void => _toggleMediaPreview(!settings.styles.mediaPreview)}
                       />
                       <label htmlFor="mediaPreview" data-localetitle="toggleMediaPreviewDescription"></label>
-                      <div className="collapsible">
-                          <form className="var-style">
-                              {t("blurInputLabel")}
-                              <button type="reset" data-localetitle="resetValue"
-                                      onClick={(event): void => {
-                                          setSettings(prevSettings => ({
-                                              ...prevSettings,
-                                              varStyles: {...prevSettings.varStyles, mdpBlur: 20}
-                                          }))
-                                      }}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
-                                          <path stroke-miterlimit="10"
-                                                d="M6.395 7.705A7.885 7.885 0 0 1 12 5.382a7.929 7.929 0 0 1 7.929 7.929A7.94 7.94 0 0 1 12 21.25a7.939 7.939 0 0 1-7.929-7.94"/>
-                                          <path stroke-linejoin="round"
-                                                d="m7.12 2.75l-.95 3.858a1.332 1.332 0 0 0 .97 1.609l3.869.948"/>
-                                      </g>
-                                  </svg>
-                              </button>
-                              <input type="number" name="mdpBlur" id="mdpBlur" data-var-name="mdpBlur"
-                                     value={settings.varStyles.mdpBlur}
-                                     onChange={(event): void => {
-                                         setSettings(prevSettings => ({
-                                             ...prevSettings,
-                                             varStyles: {...prevSettings.varStyles, mdpBlur: Number(event.target.value)}
-                                         }))
-                                     }}
-                                     data-localetitle="mdpBlurInputDescription"/>
-                              <span className="unit">px</span>
-                              <button type="submit" data-localetitle="mdpBlurInputDescription">✔</button>
-                          </form>
-                      </div>
+                      <input type="number" name="mdpBlur" id="mdpBlur" data-var-name="mdpBlur"
+                             className="blur-input"
+                             value={settings.varStyles.mdpBlur}
+                             onChange={(event): void => {
+                                 const newValue = Number(event.target.value);
+                                 setSettings(prevSettings => ({
+                                     ...prevSettings,
+                                     varStyles: {...prevSettings.varStyles, mdpBlur: newValue}
+                                 }));
+
+                                 // Apply changes immediately
+                                 if (settings.styles.mediaPreview && currentTab?.url?.includes('web4.bip.com')) {
+                                     const tabId = currentTab.id!;
+                                     chrome.scripting.executeScript({
+                                         target: { tabId },
+                                         func: insertCSSDirectly,
+                                         args: ["toggleMediaPreview", css.mediaPreview]
+                                     });
+                                 }
+                             }}
+                             data-localetitle="mdpBlurInputDescription"/>
                   </li>
                   <li>
                       {t("toggleTextInput")}
@@ -511,95 +442,61 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                   </li>
                   <li>
                       {t("toggleProfilePic")}
-                      <button type="button" className="reveal-btn">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                              <path fill="currentColor"
-                                    d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/>
-                          </svg>
-                      </button>
                       <input type="checkbox" id="profilePic" data-style="profilePic"
                              checked={settings.styles.profilePic}
                              onChange={(): void => _toggleProfilePicDescription(!settings.styles.profilePic)}
                       />
                       <label htmlFor="profilePic" data-localetitle="toggleProfilePicDescription"></label>
-                      <div className="collapsible">
-                          <form className="var-style">
-                              {t("ppSmBlurInputLabel")}
-                              <button type="reset" data-localetitle="resetValue"
-                                      onClick={(event): void => {
-                                          setSettings(prevSettings => ({
-                                              ...prevSettings,
-                                              varStyles: {...prevSettings.varStyles, ppBlur: 8}
-                                          }))
-                                      }}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
-                                          <path stroke-miterlimit="10"
-                                                d="M6.395 7.705A7.885 7.885 0 0 1 12 5.382a7.929 7.929 0 0 1 7.929 7.929A7.94 7.94 0 0 1 12 21.25a7.939 7.939 0 0 1-7.929-7.94"/>
-                                          <path stroke-linejoin="round"
-                                                d="m7.12 2.75l-.95 3.858a1.332 1.332 0 0 0 .97 1.609l3.869.948"/>
-                                      </g>
-                                  </svg>
-                              </button>
-                              <input type="number" name="ppSmBlur" id="ppSmBlur" data-var-name="ppSmBlur"
-                                     value={settings.varStyles.ppBlur}
-                                     onChange={(event): void => {
-                                         setSettings(prevSettings => ({
-                                             ...prevSettings,
-                                             varStyles: {...prevSettings.varStyles, ppBlur: Number(event.target.value)}
-                                         }))
-                                     }}
-                                     data-localetitle="ppSmBlurInputDescription"/>
-                              <span className="unit">px</span>
-                              <button type="submit" data-localetitle="ppSmBlurInputDescription">✔</button>
-                          </form>
-                      </div>
+                      <input type="number" name="ppSmBlur" id="ppSmBlur" data-var-name="ppSmBlur"
+                             className="blur-input"
+                             value={settings.varStyles.ppBlur}
+                             onChange={(event): void => {
+                                 const newValue = Number(event.target.value);
+                                 setSettings(prevSettings => ({
+                                     ...prevSettings,
+                                     varStyles: {...prevSettings.varStyles, ppBlur: newValue}
+                                 }));
+
+                                 // Apply changes immediately
+                                 if (settings.styles.profilePic && currentTab?.url?.includes('web4.bip.com')) {
+                                     const tabId = currentTab.id!;
+                                     chrome.scripting.executeScript({
+                                         target: { tabId },
+                                         func: insertCSSDirectly,
+                                         args: ["toggleProfilePicDescription", css.profilePic]
+                                     });
+                                 }
+                             }}
+                             data-localetitle="ppSmBlurInputDescription"/>
                   </li>
                   <li>
                       {t("toggleName")}
-                      <button type="button" className="reveal-btn">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                              <path fill="currentColor"
-                                    d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64z"/>
-                          </svg>
-                      </button>
                       <input type="checkbox" id="name" data-style="name"
                              checked={settings.styles.name}
                              onChange={(): void => _toggleNameDescription(!settings.styles.name)}
                       />
                       <label htmlFor="name" data-localetitle="toggleNameDescription"></label>
-                      <div className="collapsible">
-                          <form className="var-style">
-                              {t("blurInputLabel")}
-                              <button type="reset" data-localetitle="resetValue"
-                                      onClick={(event): void => {
-                                          setSettings(prevSettings => ({
-                                              ...prevSettings,
-                                              varStyles: {...prevSettings.varStyles, nmBlur: 5}
-                                          }))
-                                      }}>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
-                                          <path stroke-miterlimit="10"
-                                                d="M6.395 7.705A7.885 7.885 0 0 1 12 5.382a7.929 7.929 0 0 1 7.929 7.929A7.94 7.94 0 0 1 12 21.25a7.939 7.939 0 0 1-7.929-7.94"/>
-                                          <path stroke-linejoin="round"
-                                                d="m7.12 2.75l-.95 3.858a1.332 1.332 0 0 0 .97 1.609l3.869.948"/>
-                                      </g>
-                                  </svg>
-                              </button>
-                              <input type="number" name="nmBlur" id="nmBlur" data-var-name="nmBlur"
-                                     value={settings.varStyles.nmBlur}
-                                     onChange={(event): void => {
-                                         setSettings(prevSettings => ({
-                                             ...prevSettings,
-                                             varStyles: {...prevSettings.varStyles, nmBlur: Number(event.target.value)}
-                                         }))
-                                     }}
-                                     data-localetitle="nmBlurInputDescription"/>
-                              <span className="unit">px</span>
-                              <button type="submit" data-localetitle="nmBlurInputDescription">✔</button>
-                          </form>
-                      </div>
+                      <input type="number" name="nmBlur" id="nmBlur" data-var-name="nmBlur"
+                             className="blur-input"
+                             value={settings.varStyles.nmBlur}
+                             onChange={(event): void => {
+                                 const newValue = Number(event.target.value);
+                                 setSettings(prevSettings => ({
+                                     ...prevSettings,
+                                     varStyles: {...prevSettings.varStyles, nmBlur: newValue}
+                                 }));
+
+                                 // Apply changes immediately
+                                 if (settings.styles.name && currentTab?.url?.includes('web4.bip.com')) {
+                                     const tabId = currentTab.id!;
+                                     chrome.scripting.executeScript({
+                                         target: { tabId },
+                                         func: insertCSSDirectly,
+                                         args: ["toggleNameDescription", css.name]
+                                     });
+                                 }
+                             }}
+                             data-localetitle="nmBlurInputDescription"/>
                   </li>
               </ul>
           </div>

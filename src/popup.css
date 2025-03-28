@@ -116,6 +116,18 @@ h2{
     animation-delay: calc(0.1s * var(--animation-order, 0));
 }
 
+/* Ensure each element in the list item has proper spacing */
+#mainContent > ul > li > * {
+    margin: 5px 0;
+}
+
+/* Position collapsible div next to checkbox input */
+#mainContent > ul > li .collapsible {
+    flex-basis: auto;
+    width: 150px;
+    margin-left: 10px;
+}
+
 #mainContent > ul > li:nth-child(1) { --animation-order: 1; }
 #mainContent > ul > li:nth-child(2) { --animation-order: 2; }
 #mainContent > ul > li:nth-child(3) { --animation-order: 3; }
@@ -216,86 +228,6 @@ a:hover{
     100% { transform: rotate(360deg); }
 }
 
-@keyframes revealBtnGlow {
-    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
-    70% { box-shadow: 0 0 0 8px rgba(37, 211, 102, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-}
-
-.reveal-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 5px;
-    margin: 0 8px;
-    border: none;
-    border-radius: 50%;
-    color: #25d366;
-    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-
-.reveal-btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #25d366, #1faa52);
-    border-radius: 50%;
-    z-index: -1;
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.reveal-btn:hover {
-    color: #ffffff;
-    transform: translateY(-2px) scale(1.1);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-}
-
-.reveal-btn:hover::after {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.reveal-btn:active, .reveal-btn.active:active {
-    transform: translateY(0) scale(0.95);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.reveal-btn.active {
-    color: #ffffff;
-    animation: revealBtnGlow 2s infinite;
-}
-
-.reveal-btn.active::after {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.reveal-btn svg {
-    width: 18px;
-    height: 18px;
-    transition: all 0.3s ease;
-}
-
-.reveal-btn:hover svg {
-    transform: rotate(90deg);
-}
-
-.reveal-btn.active svg {
-    animation: spin 10s linear infinite;
-}
 @keyframes toggleOn {
     0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
     50% { box-shadow: 0 0 0 8px rgba(37, 211, 102, 0.2); }
@@ -376,216 +308,48 @@ label:hover:after {
 label[for="switch"]{
     margin-right: 5px;
 }
-@keyframes collapsibleFadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+
+/* Styling for the blur input that's positioned next to checkbox */
+.blur-input {
+    width: 45px;
+    height: 28px;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+    outline: none;
+    border: 1px solid rgba(224, 224, 224, 0.7);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+    margin-left: 10px;
+    vertical-align: middle;
 }
 
-.collapsible, .var-style, .var-style * {
-    box-sizing: border-box;
+.blur-input:focus {
+    border-color: #25d366;
+    animation: inputFocus 1s;
+    background: rgba(255, 255, 255, 1);
 }
 
-.collapsible {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    width: 90%;
-    margin: 15px auto;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border-radius: 16px;
-    z-index: 10;
-    opacity: 0;
-    transform: perspective(800px) rotateX(-10deg);
-    transform-origin: top center;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.collapsible.show {
-    max-height: 150px;
-    opacity: 1;
-    transform: perspective(800px) rotateX(0);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.06);
-    animation: collapsibleFadeIn 0.5s forwards;
-}
 @keyframes inputFocus {
     0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
     70% { box-shadow: 0 0 0 5px rgba(37, 211, 102, 0); }
     100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
 }
 
-.var-style {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px;
-    font-size: 13px;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-
-.var-style button[type="reset"] {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ff5252;
-    background: linear-gradient(135deg, #ffebee, #ffcdd2);
-    border: none;
-    border-radius: 50%;
-    margin: 0 8px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 2px 8px rgba(255, 82, 82, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-.var-style button[type="reset"]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #ff5252, #ff1744);
-    border-radius: 50%;
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: -1;
-}
-
-.var-style button[type="reset"]:hover {
-    color: white;
-    transform: translateY(-3px) scale(1.1);
-    box-shadow: 0 5px 15px rgba(255, 82, 82, 0.3);
-}
-
-.var-style button[type="reset"]:hover::after {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.var-style button[type="reset"]:active {
-    transform: translateY(0) scale(0.95);
-    box-shadow: 0 2px 5px rgba(255, 82, 82, 0.2);
-}
-
-.var-style button[type="reset"] svg {
-    width: 18px;
-    height: 18px;
-    transition: all 0.3s ease;
-}
-
-.var-style button[type="reset"]:hover svg {
-    transform: rotate(-180deg);
-}
-
-.var-style input {
-    width: 45px;
-    height: 34px;
-    padding: 0 10px;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: right;
-    outline: none;
-    border: 1px solid rgba(224, 224, 224, 0.7);
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-right: none;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.var-style input:focus {
-    border-color: #25d366;
-    animation: inputFocus 1s;
-    background: rgba(255, 255, 255, 1);
-}
-
-.var-style input[type="number"] {
+/* Styles for number inputs */
+input[type="number"] {
     -webkit-appearance: textfield;
     -moz-appearance: textfield;
     appearance: textfield;
 }
 
-.var-style input[type=number]::-webkit-inner-spin-button,
-.var-style input[type=number]::-webkit-outer-spin-button {
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
 
-.var-style .unit {
-    width: 34px;
-    height: 34px;
-    text-align: center;
-    line-height: 34px;
-    color: #757575;
-    font-weight: 500;
-    background: linear-gradient(to bottom, #f5f5f5, #eeeeee);
-    border-top: 1px solid rgba(224, 224, 224, 0.7);
-    border-bottom: 1px solid rgba(224, 224, 224, 0.7);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-.var-style button[type="submit"] {
-    width: 34px;
-    height: 34px;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    line-height: 34px;
-    outline: none;
-    border: none;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    background: linear-gradient(135deg, #25d366, #1faa52);
-    color: white;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(37, 211, 102, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-.var-style button[type="submit"]::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%);
-    transform: rotate(30deg);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.var-style button[type="submit"]:hover {
-    background: linear-gradient(135deg, #2bdf70, #25d366);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
-}
-
-.var-style button[type="submit"]:hover::before {
-    opacity: 1;
-}
-
-.var-style button[type="submit"]:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 5px rgba(37, 211, 102, 0.2);
-    background: linear-gradient(135deg, #1faa52, #1a9548);
-}
+/* Submit button styles removed as they are no longer used */
