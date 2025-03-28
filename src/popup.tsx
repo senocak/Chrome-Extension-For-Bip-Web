@@ -547,9 +547,16 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                       {t("resetButton")}
                   </button>
               </div>
+              <div id="footer">
+                  <p>
+                      <a href="https://github.com/senocak/Chrome-Extension-For-Bip-Web" target="_blank" rel="noopener noreferrer">
+                          GitHub
+                      </a>
+                  </p>
+              </div>
           </div>
       </>
-    )
+        )
 }
 const root = createRoot(document.getElementById("root")!)
 root.render(
