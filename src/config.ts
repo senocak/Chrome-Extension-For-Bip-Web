@@ -26,8 +26,6 @@ i18n
                     ppBlurInputLabel: "Normal size blur amount",
                     ppLgBlurInputLabel: "Large size blur amount",
                     toggleName: "Group/Users names",
-                    toggleNoDelay: "No transition delay",
-                    toggleUnblurActive: "Unblur all on app hover",
                     toggleBlurOnIdle: "Blur WhatsApp on Idle",
                     itBlurInputLabel: "Idle Timeout",
                     wiBlurInputLabel: "Blur amount",

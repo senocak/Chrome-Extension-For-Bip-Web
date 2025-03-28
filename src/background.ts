@@ -25,6 +25,9 @@ const removeCSSDirectly = (styleId: string): void => {
   }
 }
 
+// Import centralized CSS
+import { getCSS, getDefaultCSS } from './styles';
+
 // Listen for tab updates
 chrome.tabs.onUpdated.addListener(function (tabId, info) {
   console.log("Tab updated, info.status: " + info.status)
@@ -39,275 +42,65 @@ chrome.tabs.onUpdated.addListener(function (tabId, info) {
               chrome.storage.local.get('settings', (result) => {
                   if (result.settings) {
                       const settings = result.settings;
+                      // Get CSS from centralized styles
+                      const css = getCSS(settings);
 
                       // Apply CSS based on stored settings
                       if (settings.styles.messages) {
-                          const messagesCSS = `
-                          /* CSS selectors for web4.bip.com */
-                          div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"], 
-                          div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"], 
-                          div[itemtype="messages"] div[class^="video-element"], 
-                          div[itemtype="messages"] div[class^="document-element"], 
-                          div[itemtype="messages"] div[class^="image-element"],
-                          div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"], 
-                          div[itemtype="messages"] div[class^="_richLinkBubble__card_info__message_container__text_"], 
-                          div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"], 
-                          div[itemtype="messages"] div[class^="_replyContent_"], 
-                          div[itemtype="messages"] div[class^="_content_"], 
-                          div[itemtype="messages"] div[class^="_text_"] {
-                              filter: blur(${settings.varStyles.msBlur}px) grayscale(1) !important;
-                          }
-                          div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"]:hover, 
-                          div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"]:hover, 
-                          div[itemtype="messages"] div[class^="video-element"]:hover, 
-                          div[itemtype="messages"] div[class^="document-element"]:hover, 
-                          div[itemtype="messages"] div[class^="image-element"]:hover, 
-                          div[itemtype="messages"] div[class^="_richLinkBubble__card_info__message_container__text_"]:hover, 
-                          div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"]:hover, 
-                          div[itemtype="messages"] div[class^="_replyContent_"]:hover, 
-                          div[itemtype="messages"] div[class^="_content_"]:hover, 
-                          div[itemtype="messages"] div[class^="_text_"]:hover {
-                              filter: blur(0) grayscale(0) !important;
-                          }
-                          `;
                           chrome.scripting.executeScript({
                               target: { tabId },
                               func: insertCSSDirectly,
-                              args: ["toggleMessages", messagesCSS]
+                              args: ["toggleMessages", css.messages]
                           });
                       }
 
                       if (settings.styles.messagesPreview) {
-                          const messagesPreviewCSS = `
-                          div[class^="_contact__content__body__message"] {
-                              filter: blur(${settings.varStyles.mspBlur}px) grayscale(1);
-                          }
-                          div[class^="_contact__content__body__message"]:hover {
-                              filter: blur(0) grayscale(0) !important;
-                          }
-                          `;
                           chrome.scripting.executeScript({
                               target: { tabId },
                               func: insertCSSDirectly,
-                              args: ["toggleMessagesPreview", messagesPreviewCSS]
+                              args: ["toggleMessagesPreview", css.messagesPreview]
                           });
                       }
 
                       if (settings.styles.mediaPreview) {
-                          const mediaPreviewCSS = `
-                          div[itemtype="messages"] div[class^="video-element"], 
-                          div[itemtype="messages"] div[class^="document-element"], 
-                          div[itemtype="messages"] div[class^="image-element"],
-                          div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"] {
-                            filter: blur(${settings.varStyles.mdpBlur}px) grayscale(1);
-                            transition: initial;
-                            transition-delay: 0s;
-                          }
-                          div[itemtype="messages"] div[class^="video-element"]:hover,
-                          div[itemtype="messages"] div[class^="document-element"]:hover,
-                          div[itemtype="messages"] div[class^="image-element"]:hover,
-                          div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"]:hover {
-                            filter: blur(0) grayscale(0);
-                            transition: initial;
-                            transition-delay: 0s;
-                          }
-                          `;
                           chrome.scripting.executeScript({
                               target: { tabId },
                               func: insertCSSDirectly,
-                              args: ["toggleMediaPreview", mediaPreviewCSS]
+                              args: ["toggleMediaPreview", css.mediaPreview]
                           });
                       }
 
                       if (settings.styles.textInput) {
-                          const textInputDescriptionCSS = `
-                          .text-input, .message-input, .chat-input, textarea, input[type="text"], editor-paragraph, .editor-paragraph, #editor-paragraph {
-                            filter: blur(8px) opacity(0.25);
-                          }
-                          .text-input:hover, .message-input:hover, .chat-input:hover, textarea:hover, input[type="text"]:hover {
-                            filter: blur(0) opacity(1);
-                          }
-                          `;
                           chrome.scripting.executeScript({
                               target: { tabId },
                               func: insertCSSDirectly,
-                              args: ["toggleTextInputDescription", textInputDescriptionCSS]
+                              args: ["toggleTextInputDescription", css.textInput]
                           });
                       }
 
                       if (settings.styles.profilePic) {
-                          const profilePicDescriptionCSS = `
-                          ._avatar_1vdaa_1 {
-                            filter: blur(${settings.varStyles.ppBlur}px) grayscale(1);
-                            transition-delay: 0s;
-                          }
-                          ._avatar_1vdaa_1:hover {
-                            filter: blur(0) grayscale(0);
-                            transition-delay: 0s;
-                          }
-                          `;
                           chrome.scripting.executeScript({
                               target: { tabId },
                               func: insertCSSDirectly,
-                              args: ["toggleProfilePicDescription", profilePicDescriptionCSS]
+                              args: ["toggleProfilePicDescription", css.profilePic]
                           });
                       }
 
                       if (settings.styles.name) {
-                          const nameDescriptionCSS = `
-                          div[class^="_contact__content__header__name_"],
-                          span[class^="_message__nick_"],
-                          div[class^="_username_"],
-                          h3[class^="_info_card__title_"]
-                          {
-                            filter: blur(${settings.varStyles.nmBlur}px) grayscale(1);
-                          }
-                          div[class^="_contact__content__header__name_"]:hover,
-                          span[class^="_message__nick_"]:hover,
-                          div[class^="_username_"]:hover,
-                          h3[class^="_info_card__title_"]:hover
-                          {
-                            filter: blur(0) grayscale(0);
-                          }
-                          `;
                           chrome.scripting.executeScript({
                               target: { tabId },
                               func: insertCSSDirectly,
-                              args: ["toggleNameDescription", nameDescriptionCSS]
-                          });
-                      }
-
-                      if (settings.styles.noDelay) {
-                          const noDelayDescriptionCSS = `
-                          /* CSS selectors for web4.bip.com */
-                          .message:hover, 
-                          .chat-message:hover, 
-                          .message-content:hover, 
-                          .message-text:hover, 
-                          .message-body:hover,
-                          .message-preview:hover, 
-                          .preview-text:hover, 
-                          .chat-preview:hover, 
-                          .preview-content:hover,
-                          .media-preview:hover, 
-                          .image-preview:hover, 
-                          .video-preview:hover, 
-                          .attachment-preview:hover, 
-                          img:hover, 
-                          video:hover,
-                          .text-input:hover, 
-                          .message-input:hover, 
-                          .chat-input:hover, 
-                          textarea:hover, 
-                          input[type="text"]:hover,
-                          .profile-pic:hover, 
-                          .avatar:hover, 
-                          .user-avatar:hover, 
-                          .profile-image:hover, 
-                          .user-pic:hover, 
-                          .user-image:hover,
-                          .user-name:hover, 
-                          .username:hover, 
-                          .display-name:hover, 
-                          .chat-name:hover, 
-                          .contact-name:hover, 
-                          .name:hover
-                          {
-                            transition-delay: 0.04s !important;
-                            -webkit-transition-duration: 0s !important;
-                            -moz-transition-duration: 0s !important;
-                            -o-transition-duration: 0s !important;
-                            transition-duration: 0s !important;
-                          }
-                          `;
-                          chrome.scripting.executeScript({
-                              target: { tabId },
-                              func: insertCSSDirectly,
-                              args: ["toggleNoDelayDescription", noDelayDescriptionCSS]
-                          });
-                      }
-
-                      if (settings.styles.unblurActive) {
-                          const unblurActiveDescriptionCSS = `
-                          /* CSS selectors for web4.bip.com */
-                          body:hover .message, 
-                          body:hover .chat-message, 
-                          body:hover .message-content, 
-                          body:hover .message-text, 
-                          body:hover .message-body,
-                          body:hover .message-preview, 
-                          body:hover .preview-text, 
-                          body:hover .chat-preview, 
-                          body:hover .preview-content,
-                          body:hover .media-preview, 
-                          body:hover .image-preview, 
-                          body:hover .video-preview, 
-                          body:hover .attachment-preview, 
-                          body:hover img, 
-                          body:hover video,
-                          body:hover .text-input, 
-                          body:hover .message-input, 
-                          body:hover .chat-input, 
-                          body:hover textarea, 
-                          body:hover input[type="text"],
-                          body:hover .profile-pic, 
-                          body:hover .avatar, 
-                          body:hover .user-avatar, 
-                          body:hover .profile-image, 
-                          body:hover .user-pic, 
-                          body:hover .user-image,
-                          body:hover .user-name, 
-                          body:hover .username, 
-                          body:hover .display-name, 
-                          body:hover .chat-name, 
-                          body:hover .contact-name, 
-                          body:hover .name
-                          {
-                            filter: blur(0) grayscale(0);
-                            transition-delay: 0s;
-                          }
-                          `;
-                          chrome.scripting.executeScript({
-                              target: { tabId },
-                              func: insertCSSDirectly,
-                              args: ["toggleUnblurActiveDescription", unblurActiveDescriptionCSS]
+                              args: ["toggleNameDescription", css.name]
                           });
                       }
                   } else {
                       console.log("No settings found in storage, using defaults");
                       // If no settings are found, apply default CSS
-                      const defaultMessagesCSS = `
-                      /* CSS selectors for web4.bip.com */
-                      div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"], 
-                      div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"], 
-                      div[itemtype="messages"] div[class^="video-element"], 
-                      div[itemtype="messages"] div[class^="document-element"], 
-                      div[itemtype="messages"] div[class^="image-element"],
-                      div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"], 
-                      div[itemtype="messages"] div[class^="_richLinkBubble__card_info__message_container__text_"], 
-                      div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"], 
-                      div[itemtype="messages"] div[class^="_replyContent_"], 
-                      div[itemtype="messages"] div[class^="_content_"], 
-                      div[itemtype="messages"] div[class^="_text_"] {
-                          filter: blur(8px) grayscale(1) !important;
-                      }
-                      div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"]:hover, 
-                      div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"]:hover, 
-                      div[itemtype="messages"] div[class^="video-element"]:hover, 
-                      div[itemtype="messages"] div[class^="document-element"]:hover, 
-                      div[itemtype="messages"] div[class^="image-element"]:hover, 
-                      div[itemtype="messages"] div[class^="_richLinkBubble__card_info__message_container__text_"]:hover, 
-                      div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"]:hover, 
-                      div[itemtype="messages"] div[class^="_replyContent_"]:hover, 
-                      div[itemtype="messages"] div[class^="_content_"]:hover, 
-                      div[itemtype="messages"] div[class^="_text_"]:hover {
-                          filter: blur(0) grayscale(0) !important;
-                      }
-                      `;
+                      const defaultCSS: { messages: string } = getDefaultCSS();
                       chrome.scripting.executeScript({
                           target: { tabId },
                           func: insertCSSDirectly,
-                          args: ["toggleMessages", defaultMessagesCSS]
+                          args: ["toggleMessages", defaultCSS.messages]
                       });
                   }
               });
