@@ -107,10 +107,6 @@ h2{
     padding: 15px;
     margin-bottom: 0;
     border-bottom: 1px solid rgba(240, 240, 240, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
     transition: all 0.3s ease;
     animation: fadeIn 0.5s ease-out both;
     animation-delay: calc(0.1s * var(--animation-order, 0));
@@ -119,6 +115,32 @@ h2{
 /* Ensure each element in the list item has proper spacing */
 #mainContent > ul > li > * {
     margin: 5px 0;
+}
+
+/* Style for list items using flexbox for better alignment */
+#mainContent > ul > li {
+    display: grid;
+    grid-template-columns: 140px auto auto;
+    grid-gap: 10px;
+    align-items: center;
+}
+
+/* Style for the text message */
+#mainContent > ul > li > :first-child:not(input):not(label) {
+    grid-column: 1;
+    width: 140px;
+}
+
+/* Style for the checkbox and label group */
+#mainContent > ul > li > input[type=checkbox],
+#mainContent > ul > li > label {
+    grid-column: 2;
+}
+
+/* Style for the number input */
+#mainContent > ul > li > .blur-input {
+    grid-column: 3;
+    margin-left: 5px;
 }
 
 /* Position collapsible div next to checkbox input */
@@ -145,6 +167,11 @@ h2{
     background-color: rgba(249, 249, 249, 0.8);
     transform: translateX(5px);
     box-shadow: -5px 0 10px -5px rgba(193, 232, 252, 0.2);
+    /* Ensure the grid layout is maintained during hover */
+    display: grid;
+    grid-template-columns: 140px auto auto;
+    grid-gap: 10px;
+    align-items: center;
 }
 #mainContent locales {
     display: inline-block;
