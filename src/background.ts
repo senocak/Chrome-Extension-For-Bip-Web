@@ -2,6 +2,26 @@
 import { getCSS, getDefaultCSS } from './styles'
 import {CSSStyles, Settings, StorageResult} from './types'
 
+// Helper function to update badge count
+const updateBadgeCount = (tab: chrome.tabs.Tab): void => {
+  // Check if the tab URL includes 'web4.bip.com'
+  const isWeb4Bip = tab.url?.includes('web4.bip.com') || false
+
+  // Load settings from chrome.storage.local
+  chrome.storage.local.get('settings', (result: StorageResult): void => {
+    if (result.settings) {
+      const settings: Settings = result.settings
+      // Count enabled styles
+      const enabledStylesCount = Object.values(settings.styles).filter(Boolean).length
+      // Set badge text based on whether the tab is web4.bip.com
+      chrome.action.setBadgeText({ text: isWeb4Bip ? enabledStylesCount.toString() : "0" })
+    } else {
+      // If no settings are found, set badge text to "0"
+      chrome.action.setBadgeText({ text: isWeb4Bip ? "0" : "0" })
+    }
+  })
+}
+
 // Helper function to insert CSS directly into the page
 const insertCSSDirectly = (styleId: string, cssRules: string): void => {
   console.log("Started insertCSSDirectly")
@@ -35,6 +55,9 @@ chrome.tabs.onUpdated.addListener(function (tabId: number, info: chrome.tabs.Tab
   if (info.status === 'complete') {
       // Get the tab URL
       chrome.tabs.get(tabId, function(tab: chrome.tabs.Tab): void {
+          // Update badge count for the updated tab
+          updateBadgeCount(tab)
+
           // Check if the tab URL includes 'web4.bip.com'
           if (tab.url && tab.url.includes('web4.bip.com')) {
               console.log("Detected web4.bip.com, applying CSS")
@@ -102,6 +125,16 @@ chrome.tabs.onUpdated.addListener(function (tabId: number, info: chrome.tabs.Tab
           }
       })
   }
+})
+
+// Listen for tab activation (when user switches tabs)
+chrome.tabs.onActivated.addListener(function(activeInfo: chrome.tabs.TabActiveInfo): void {
+  console.log("Tab activated: " + activeInfo.tabId)
+  // Get the activated tab
+  chrome.tabs.get(activeInfo.tabId, function(tab: chrome.tabs.Tab): void {
+    // Update badge count
+    updateBadgeCount(tab)
+  })
 })
 
 // Keep the polling function for other background tasks

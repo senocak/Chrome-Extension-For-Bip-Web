@@ -30,6 +30,7 @@ i18n
                     itBlurInputLabel: "Idle Timeout",
                     wiBlurInputLabel: "Blur amount",
                     resetButton: "Reset Settings",
+                    notOnBipWeb: "This extension only works on web4.bip.com",
                 },
             },
             tr: {
@@ -51,6 +52,7 @@ i18n
                     itBlurInputLabel: "Boşta Kalma Süresi",
                     wiBlurInputLabel: "Bulanıklık miktarı",
                     resetButton: "Ayarları Sıfırla",
+                    notOnBipWeb: "Bu uzantı yalnızca web4.bip.com üzerinde çalışır",
                 },
             },
         },

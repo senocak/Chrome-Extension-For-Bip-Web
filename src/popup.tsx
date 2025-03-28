@@ -34,15 +34,15 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     const [settings, setSettings, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal('settings', defaultSettings)
 
     // Dynamically calculate the count of enabled styles
-    const enabledStylesCount: number = useMemo((): number => {
+    const enabledStylesCount: string = useMemo((): string => {
         if (!settings || !settings.styles)
-            return 0
-        return Object.values(settings.styles).filter(Boolean).length
+            return "X"
+        return Object.values(settings.styles).filter(Boolean).length.toString()
     }, [settings])
 
     useEffect((): void => {
-        chrome.action.setBadgeText({ text: enabledStylesCount.toString() })
-    }, [enabledStylesCount])
+        chrome.action.setBadgeText({ text: isWeb4Bip() ? enabledStylesCount.toString() : "X" })
+    }, [enabledStylesCount, currentTab])
 
     useEffect((): void => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs: chrome.tabs.Tab[]): void {
@@ -389,7 +389,24 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
           <div className="header">
               <h1>{t("extensionSettings")}</h1>
           </div>
-          <div id="mainContent">
+          {!isWeb4Bip() && (
+            <div style={{
+              margin: '0 15px 15px',
+              padding: '10px 15px',
+              backgroundColor: '#ffebee',
+              color: '#c62828',
+              borderRadius: '8px',
+              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              animation: 'fadeIn 0.5s ease-out'
+            }}>
+              {t("notOnBipWeb") || "This extension only works on web4.bip.com"}
+            </div>
+          )}
+          {isWeb4Bip() && (
+            <div id="mainContent">
               <ul>
                   <li>
                       {t("toggleMessages")}
@@ -575,7 +592,8 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                       </a>
                   </p>
               </div>
-          </div>
+            </div>
+          )}
       </>
         )
 }
