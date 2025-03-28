@@ -5,12 +5,13 @@ import { useTranslation } from "react-i18next"
 import {useChromeStorageLocal} from 'use-chrome-storage'
 import "./popup.css"
 import { getCSS } from './styles'
+import { Settings, CSSStyles } from './types'
 
 const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     const [currentTab, setCurrentTab] = useState<chrome.tabs.Tab |null>(null)
     const { t } = useTranslation()
 
-    const defaultSettings = {
+    const defaultSettings: Settings = {
         on: true,
         styles: {
             messages: false,
@@ -79,7 +80,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // Get CSS from centralized styles
-    const css = getCSS(settings)
+    const css: CSSStyles = getCSS(settings)
 
     // toggleMessages
     const messagesCSS: string = css.messages
@@ -205,7 +206,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     const profilePicDescriptionCSS: string = css.profilePic
-    const _toggleProfilePicDescription = (status: boolean): void => {
+    const _toggleProfilePicDescription: (status: boolean) => void = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
             const tabId: number = tab.id!
@@ -234,7 +235,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     const nameDescriptionCSS: string = css.name
-    const _toggleNameDescription = (status: boolean): void => {
+    const _toggleNameDescription: (status: boolean) => void = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
             const tabId: number = tabs[0].id!
@@ -279,7 +280,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                 "toggleNameDescription"
             ]
 
-            styleIds.forEach(styleId => {
+            styleIds.forEach((styleId: string): void => {
                 chrome.scripting.executeScript({
                     target: { tabId },
                     func: removeCSSDirectly,
@@ -401,14 +402,14 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              className="blur-input"
                              value={settings.varStyles.msBlur}
                              onChange={(event): void => {
-                                 const newValue = Number(event.target.value)
+                                 const newValue: number = Number(event.target.value)
                                  setSettings(prevSettings => ({
                                      ...prevSettings,
                                      varStyles: {...prevSettings.varStyles, msBlur: newValue}
                                  }))
                                  // Apply changes immediately
                                  if (settings.styles.messages && currentTab?.url?.includes('web4.bip.com')) {
-                                     const tabId: any = currentTab.id!
+                                     const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
                                          func: insertCSSDirectly,

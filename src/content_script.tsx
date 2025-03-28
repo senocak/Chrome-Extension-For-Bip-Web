@@ -1,4 +1,10 @@
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+import { ContentMessage } from './types'
+
+chrome.runtime.onMessage.addListener(function (
+  msg: ContentMessage, 
+  sender: chrome.runtime.MessageSender, 
+  sendResponse: (response?: any) => void
+): boolean {
   if (msg.color) {
     console.log("Receive color = " + msg.color);
     document.body.style.backgroundColor = msg.color;
@@ -6,4 +12,5 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   } else {
     sendResponse("Color message is none.");
   }
+  return true; // Keep the message channel open for async responses
 });

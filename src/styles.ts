@@ -2,11 +2,12 @@
  * Centralized CSS styles for the Chrome extension
  * This file contains all the CSS rules used in the extension
  */
+import { Settings, CSSStyles, DefaultCSSStyles } from './types'
 
 // Default CSS for when no settings are found
-export const getDefaultCSS = () => {
+export const getDefaultCSS = (): DefaultCSSStyles => {
   // Default settings with standard blur values
-  const defaultSettings = {
+  const defaultSettings: Partial<Settings> = {
     varStyles: {
       msBlur: 8,
       mspBlur: 8,
@@ -16,16 +17,27 @@ export const getDefaultCSS = () => {
       ppBlur: 8,
       wiBlur: 14,
     }
-  };
-
+  }
   // Reuse the getCSS function with default settings
   return {
     messages: getCSS(defaultSettings).messages
-  };
-};
+  }
+}
 
 // Helper function to get CSS with dynamic values
-export const getCSS = (settings: any) => {
+export const getCSS = (settings: Partial<Settings>): CSSStyles => {
+  // Default blur values in case settings.varStyles is undefined
+  const defaultBlur = {
+    msBlur: 8,
+    mspBlur: 8,
+    mdgBlur: 20,
+    mdpBlur: 20,
+    nmBlur: 5,
+    ppBlur: 8,
+    wiBlur: 14,
+  }
+  // Use settings.varStyles if defined, otherwise use default values
+  const varStyles = settings.varStyles || defaultBlur
   return {
     // Messages CSS
     messages: `
@@ -43,7 +55,7 @@ export const getCSS = (settings: any) => {
     div[itemtype="messages"] div[class^="_text_"],
     div[class^="_search_messages__search_results__messages__message_card_"]
     {
-        filter: blur(${settings.varStyles.msBlur}px) grayscale(1) !important;
+        filter: blur(${varStyles.msBlur}px) grayscale(1) !important;
     }
     div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"]:hover, 
     div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"]:hover, 
@@ -64,7 +76,7 @@ export const getCSS = (settings: any) => {
     // Messages Preview CSS
     messagesPreview: `
     div[class^="_contact__content__body__message"] {
-        filter: blur(${settings.varStyles.mspBlur}px) grayscale(1);
+        filter: blur(${varStyles.mspBlur}px) grayscale(1);
     }
     div[class^="_contact__content__body__message"]:hover {
         filter: blur(0) grayscale(0) !important;
@@ -77,7 +89,7 @@ export const getCSS = (settings: any) => {
     div[itemtype="messages"] div[class^="document-element"], 
     div[itemtype="messages"] div[class^="image-element"],
     div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"] {
-      filter: blur(${settings.varStyles.mdpBlur}px) grayscale(1);
+      filter: blur(${varStyles.mdpBlur}px) grayscale(1);
       transition: initial;
       transition-delay: 0s;
     }
@@ -96,7 +108,7 @@ export const getCSS = (settings: any) => {
     .editor-paragraph,
     input
     {
-      filter: blur(${settings.varStyles.wiBlur}px) grayscale(1);
+      filter: blur(${varStyles.wiBlur}px) grayscale(1);
     }
     .editor-paragraph:hover,
     input:hover
@@ -110,7 +122,7 @@ export const getCSS = (settings: any) => {
     div[class^="_avatar_"],
     ._avatar_1vdaa_1
     {
-      filter: blur(${settings.varStyles.ppBlur}px) grayscale(1);
+      filter: blur(${varStyles.ppBlur}px) grayscale(1);
       transition-delay: 0s;
     }
     ._avatar_1vdaa_1:hover,
@@ -134,7 +146,7 @@ export const getCSS = (settings: any) => {
     div[class^="_action__chip__row__title_"],
     div[class^="_contact_info__title__user_info__user_name_"]
     {
-      filter: blur(${settings.varStyles.nmBlur}px) grayscale(1);
+      filter: blur(${varStyles.nmBlur}px) grayscale(1);
     }
     div[class^="_contact__content__header__name_"]:hover,
     span[class^="_message__nick_"]:hover,
