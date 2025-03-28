@@ -42,6 +42,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
 
     useEffect((): void => {
         chrome.action.setBadgeText({ text: isWeb4Bip() ? enabledStylesCount.toString() : "X" })
+        chrome.action.setBadgeBackgroundColor({ color: isWeb4Bip() ? "#4285F4" : "#FF0000" })
     }, [enabledStylesCount, currentTab])
 
     useEffect((): void => {
@@ -383,11 +384,14 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }, [messagesCSS, messagesPreviewCSS, mediaPreviewCSS, textInputDescriptionCSS, profilePicDescriptionCSS, nameDescriptionCSS]) // Update when CSS changes
 
-
     return (
       <>
           <div className="header">
-              <h1>{t("extensionSettings")}</h1>
+              <h1>
+                  <a href="https://github.com/senocak/Chrome-Extension-For-Bip-Web" target="_blank" rel="noopener noreferrer">
+                      {t("extensionSettings")}
+                  </a>
+              </h1>
           </div>
           {!isWeb4Bip() && (
             <div style={{
@@ -584,13 +588,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                   >
                       {t("resetButton")}
                   </button>
-              </div>
-              <div id="footer">
-                  <p>
-                      <a href="https://github.com/senocak/Chrome-Extension-For-Bip-Web" target="_blank" rel="noopener noreferrer">
-                          GitHub
-                      </a>
-                  </p>
               </div>
             </div>
           )}

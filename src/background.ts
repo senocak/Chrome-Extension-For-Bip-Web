@@ -5,7 +5,7 @@ import {CSSStyles, Settings, StorageResult} from './types'
 // Helper function to update badge count
 const updateBadgeCount = (tab: chrome.tabs.Tab): void => {
   // Check if the tab URL includes 'web4.bip.com'
-  const isWeb4Bip = tab.url?.includes('web4.bip.com') || false
+  const isWeb4Bip: boolean = tab.url?.includes('web4.bip.com') || false
 
   // Load settings from chrome.storage.local
   chrome.storage.local.get('settings', (result: StorageResult): void => {
@@ -14,10 +14,12 @@ const updateBadgeCount = (tab: chrome.tabs.Tab): void => {
       // Count enabled styles
       const enabledStylesCount = Object.values(settings.styles).filter(Boolean).length
       // Set badge text based on whether the tab is web4.bip.com
-      chrome.action.setBadgeText({ text: isWeb4Bip ? enabledStylesCount.toString() : "0" })
+      chrome.action.setBadgeText({ text: isWeb4Bip ? enabledStylesCount.toString() : "X" })
+      chrome.action.setBadgeBackgroundColor({ color: isWeb4Bip ? "#4285F4" : "#FF0000" })
     } else {
       // If no settings are found, set badge text to "0"
-      chrome.action.setBadgeText({ text: isWeb4Bip ? "0" : "0" })
+      chrome.action.setBadgeText({ text: "X" })
+      chrome.action.setBadgeBackgroundColor({ color: isWeb4Bip ? "#4285F4" : "#FF0000" })
     }
   })
 }
