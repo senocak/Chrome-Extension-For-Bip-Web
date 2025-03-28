@@ -263,6 +263,35 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }
 
+    // Reset all settings to default
+    const _resetSettings = (): void => {
+        chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
+            const tab: chrome.tabs.Tab = tabs[0]
+            const tabId: number = tab.id!
+
+            // Remove all CSS
+            const styleIds = [
+                "toggleMessages", 
+                "toggleMessagesPreview", 
+                "toggleMediaPreview", 
+                "toggleTextInputDescription", 
+                "toggleProfilePicDescription", 
+                "toggleNameDescription"
+            ]
+
+            styleIds.forEach(styleId => {
+                chrome.scripting.executeScript({
+                    target: { tabId },
+                    func: removeCSSDirectly,
+                    args: [styleId]
+                })
+            })
+
+            // Reset settings to default
+            setSettings(defaultSettings)
+        })
+    }
+
     useEffect((): void => {
         // Load settings from chrome.storage.local on page load
         chrome.storage.local.get('settings', (result): void => {
@@ -510,6 +539,14 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              data-localetitle="nmBlurInputDescription"/>
                   </li>
               </ul>
+              <div className="reset-button-container">
+                  <button 
+                      className="reset-button" 
+                      onClick={_resetSettings}
+                  >
+                      {t("resetButton")}
+                  </button>
+              </div>
           </div>
       </>
     )

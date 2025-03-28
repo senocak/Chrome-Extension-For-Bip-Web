@@ -29,6 +29,7 @@ i18n
                     toggleBlurOnIdle: "Blur WhatsApp on Idle",
                     itBlurInputLabel: "Idle Timeout",
                     wiBlurInputLabel: "Blur amount",
+                    resetButton: "Reset Settings",
                 },
             },
             tr: {
@@ -49,6 +50,7 @@ i18n
                     toggleBlurOnIdle: "Boştayken WhatsApp'ı Bulanıklaştır",
                     itBlurInputLabel: "Boşta Kalma Süresi",
                     wiBlurInputLabel: "Bulanıklık miktarı",
+                    resetButton: "Ayarları Sıfırla",
                 },
             },
         },

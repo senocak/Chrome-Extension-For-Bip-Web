@@ -5,36 +5,22 @@
 
 // Default CSS for when no settings are found
 export const getDefaultCSS = () => {
+  // Default settings with standard blur values
+  const defaultSettings = {
+    varStyles: {
+      msBlur: 8,
+      mspBlur: 8,
+      mdgBlur: 20,
+      mdpBlur: 20,
+      nmBlur: 5,
+      ppBlur: 8,
+      wiBlur: 14,
+    }
+  };
+
+  // Reuse the getCSS function with default settings
   return {
-    // Default Messages CSS
-    messages: `
-    /* CSS selectors for web4.bip.com */
-    div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"], 
-    div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"], 
-    div[itemtype="messages"] div[class^="video-element"], 
-    div[itemtype="messages"] div[class^="document-element"], 
-    div[itemtype="messages"] div[class^="image-element"],
-    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"], 
-    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__message_container__text_"], 
-    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"], 
-    div[itemtype="messages"] div[class^="_replyContent_"], 
-    div[itemtype="messages"] div[class^="_content_"], 
-    div[itemtype="messages"] div[class^="_text_"] {
-        filter: blur(8px) grayscale(1) !important;
-    }
-    div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"]:hover, 
-    div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"]:hover, 
-    div[itemtype="messages"] div[class^="video-element"]:hover, 
-    div[itemtype="messages"] div[class^="document-element"]:hover, 
-    div[itemtype="messages"] div[class^="image-element"]:hover, 
-    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__message_container__text_"]:hover, 
-    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"]:hover, 
-    div[itemtype="messages"] div[class^="_replyContent_"]:hover, 
-    div[itemtype="messages"] div[class^="_content_"]:hover, 
-    div[itemtype="messages"] div[class^="_text_"]:hover {
-        filter: blur(0) grayscale(0) !important;
-    }
-    `
+    messages: getCSS(defaultSettings).messages
   };
 };
 
