@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import { createRoot } from "react-dom/client"
 import "./config.ts"
 import { useTranslation } from "react-i18next"
@@ -7,7 +7,6 @@ import "./popup.css"
 import { getCSS } from './styles'
 
 const Popup: () => React.JSX.Element = (): React.JSX.Element => {
-    const [count, setCount] = useState<number>(0)
     const [currentTab, setCurrentTab] = useState<chrome.tabs.Tab |null>(null)
     const { t } = useTranslation()
 
@@ -33,9 +32,16 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
     const [settings, setSettings, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal('settings', defaultSettings)
 
+    // Dynamically calculate the count of enabled styles
+    const enabledStylesCount: number = useMemo((): number => {
+        if (!settings || !settings.styles)
+            return 0
+        return Object.values(settings.styles).filter(Boolean).length
+    }, [settings])
+
     useEffect((): void => {
-        chrome.action.setBadgeText({ text: count.toString() })
-    }, [count])
+        chrome.action.setBadgeText({ text: enabledStylesCount.toString() })
+    }, [enabledStylesCount])
 
     useEffect((): void => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs: chrome.tabs.Tab[]): void {
@@ -87,7 +93,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: insertCSSDirectly,
                     args: ["toggleMessages", messagesCSS]
                 })
-                setCount(count + 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, messages: true}
@@ -98,7 +103,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: removeCSSDirectly,
                     args: ["toggleMessages"]
                 })
-                setCount(count - 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, messages: false}
@@ -120,7 +124,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: insertCSSDirectly,
                     args: ["toggleMessagesPreview", messagesPreviewCSS]
                 })
-                setCount(count + 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, messagesPreview: true}
@@ -131,7 +134,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: removeCSSDirectly,
                     args: ["toggleMessagesPreview"]
                 })
-                setCount(count - 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, messagesPreview: false}
@@ -153,7 +155,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: insertCSSDirectly,
                     args: ["toggleMediaPreview", mediaPreviewCSS]
                 })
-                setCount(count + 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, mediaPreview: true}
@@ -164,7 +165,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: removeCSSDirectly,
                     args: ["toggleMediaPreview"]
                 })
-                setCount(count - 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, mediaPreview: false}
@@ -186,7 +186,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: insertCSSDirectly,
                     args: ["toggleTextInputDescription", textInputDescriptionCSS]
                 })
-                setCount(count + 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, textInput: true}
@@ -197,7 +196,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: removeCSSDirectly,
                     args: ["toggleTextInputDescription"]
                 })
-                setCount(count - 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, textInput: false}
@@ -217,7 +215,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: insertCSSDirectly,
                     args: ["toggleProfilePicDescription", profilePicDescriptionCSS]
                 })
-                setCount(count + 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, profilePic: true}
@@ -228,7 +225,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: removeCSSDirectly,
                     args: ["toggleProfilePicDescription"]
                 })
-                setCount(count - 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, profilePic: false}
@@ -249,7 +245,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: insertCSSDirectly,
                     args: ["toggleNameDescription", nameDescriptionCSS]
                 })
-                setCount(count + 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, name: true}
@@ -260,7 +255,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                     func: removeCSSDirectly,
                     args: ["toggleNameDescription"]
                 })
-                setCount(count - 1)
                 setSettings(prevSettings => ({
                     ...prevSettings,
                     styles: {...prevSettings.styles, name: false}
