@@ -481,6 +481,26 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              onChange={(): void => _toggleTextInputDescription(!settings.styles.textInput)}
                       />
                       <label htmlFor="textInput" data-localetitle="toggleTextInputDescription"></label>
+                      <input type="number" name="wiBlur" id="wiBlur" data-var-name="wiBlur"
+                             className="blur-input"
+                             value={settings.varStyles.wiBlur}
+                             onChange={(event): void => {
+                                 const newValue: number = Number(event.target.value)
+                                 setSettings(prevSettings => ({
+                                     ...prevSettings,
+                                     varStyles: {...prevSettings.varStyles, wiBlur: newValue}
+                                 }))
+                                 // Apply changes immediately
+                                 if (settings.styles.textInput && currentTab?.url?.includes('web4.bip.com')) {
+                                     const tabId: number = currentTab.id!
+                                     chrome.scripting.executeScript({
+                                         target: { tabId },
+                                         func: insertCSSDirectly,
+                                         args: ["toggleTextInputDescription", css.textInput]
+                                     })
+                                 }
+                             }}
+                             data-localetitle="wiBlurInputDescription"/>
                   </li>
                   <li>
                       {t("toggleProfilePic")}
