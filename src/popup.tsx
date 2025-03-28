@@ -74,25 +74,37 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleMessages
-    const messagesCSS = isWeb4Bip() 
+    const messagesCSS: string = isWeb4Bip() 
     ? `
     /* CSS selectors for web4.bip.com */
-    div[class^="_textBubble__card_info__message_container_"], span[class^="_itemWrapper_"]  {
+    div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"], 
+    div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"], 
+    div[itemtype="messages"] div[class^="video-element"], 
+    div[itemtype="messages"] div[class^="document-element"], 
+    div[itemtype="messages"] div[class^="image-element"],
+    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"], 
+    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__message_container__text_"], 
+    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"], 
+    div[itemtype="messages"] div[class^="_replyContent_"], 
+    div[itemtype="messages"] div[class^="_content_"], 
+    div[itemtype="messages"] div[class^="_text_"] {
         filter: blur(${settings.varStyles.msBlur}px) grayscale(1) !important;
     }
-    .message:hover, .chat-message:hover, .message-content:hover, .message-text:hover, .message-body:hover {
+    div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"]:hover, 
+    div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"]:hover, 
+    div[itemtype="messages"] div[class^="video-element"]:hover, 
+    div[itemtype="messages"] div[class^="document-element"]:hover, 
+    div[itemtype="messages"] div[class^="image-element"]:hover, 
+    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__message_container__text_"]:hover, 
+    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__info_"]:hover, 
+    div[itemtype="messages"] div[class^="_replyContent_"]:hover, 
+    div[itemtype="messages"] div[class^="_content_"]:hover, 
+    div[itemtype="messages"] div[class^="_text_"]:hover {
         filter: blur(0) grayscale(0) !important;
     }
     `
-    : `
-    .eXKgZM4Ydwjk2iheJ3xYJQ\\=\\=, .bEAiavpalHAUgqQjBWUttA\\=\\=, ._90RvQvD8zmqqqKvDqsMLqQ\\=\\=, .wTN1sxCb\\+VqwKVUzbvVflA\\=\\=, ._3IAu8PIev8b5aMag6SnPmw\\=\\= {
-        filter: blur(${settings.varStyles.msBlur}px) grayscale(1) !important;
-    }
-    .eXKgZM4Ydwjk2iheJ3xYJQ\\=\\=:hover, .bEAiavpalHAUgqQjBWUttA\\=\\=:hover, ._90RvQvD8zmqqqKvDqsMLqQ\\=\\=:hover, .wTN1sxCb\\+VqwKVUzbvVflA\\=\\=:hover, ._3IAu8PIev8b5aMag6SnPmw\\=\\=:hover {
-        filter: blur(0) grayscale(0) !important;
-    }
-    `;
-    const _toggleMessages = (status: boolean): void => {
+    : ``;
+    const _toggleMessages: (status: boolean) => void = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
             const tabId: number = tab.id!
@@ -123,26 +135,15 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleMessagesPreview
-    const messagesPreviewCSS = isWeb4Bip() 
-    ? `
-    /* CSS selectors for web4.bip.com */
-    .message-preview, .preview-text, .chat-preview, .preview-content {
-      filter: blur(${settings.varStyles.mspBlur}px) grayscale(1);
-      transition-delay: 0s;
+    const messagesPreviewCSS: string =
+    `
+    div[class^="_contact__content__body__message"] {
+        filter: blur(${settings.varStyles.mspBlur}px) grayscale(1);
     }
-    .message-preview:hover, .preview-text:hover, .chat-preview:hover, .preview-content:hover {
-      filter: blur(0) grayscale(0);
+    div[class^="_contact__content__body__message"]:hover {
+        filter: blur(0) grayscale(0) !important;
     }
     `
-    : `
-    ._0kv113w-tlp6u3ctDSjI9Q\\=\\= {
-      filter: blur(${settings.varStyles.mspBlur}px) grayscale(1);
-      transition-delay: 0s;
-    }
-    ._0kv113w-tlp6u3ctDSjI9Q\\=\\=:hover {
-      filter: blur(0) grayscale(0);
-    }
-    `;
     const _toggleMessagesPreview = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
@@ -175,33 +176,26 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleMediaPreview
-    const mediaPreviewCSS = isWeb4Bip() 
-    ? `
-    /* CSS selectors for web4.bip.com */
-    .media-preview, .image-preview, .video-preview, .attachment-preview, img, video {
-      filter: blur(${settings.varStyles.mdpBlur}px) grayscale(1);
-      transition: initial;
-      transition-delay: 0s;
-    }
-    .media-preview:hover, .image-preview:hover, .video-preview:hover, .attachment-preview:hover, img:hover, video:hover {
-      filter: blur(0) grayscale(0);
-      transition: initial;
-      transition-delay: 0s;
-    }
+    const mediaPreviewCSS: string =
     `
-    : `
-    .image-element.bubble.display {
+    div[itemtype="messages"] div[class^="video-element"], 
+    div[itemtype="messages"] div[class^="document-element"], 
+    div[itemtype="messages"] div[class^="image-element"],
+    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"] {
       filter: blur(${settings.varStyles.mdpBlur}px) grayscale(1);
       transition: initial;
       transition-delay: 0s;
     }
-    .image-element.bubble.display:hover {
+    div[itemtype="messages"] div[class^="video-element"]:hover,
+    div[itemtype="messages"] div[class^="document-element"]:hover,
+    div[itemtype="messages"] div[class^="image-element"]:hover,
+    div[itemtype="messages"] div[class^="_richLinkBubble__card_info__content__image"]:hover {
       filter: blur(0) grayscale(0);
       transition: initial;
       transition-delay: 0s;
     }
     `;
-    const _toggleMediaPreview = (status: boolean): void => {
+    const _toggleMediaPreview: (status: boolean) => void = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
             const tabId: number = tabs[0].id!
@@ -233,25 +227,16 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleTextInputDescription
-    const textInputDescriptionCSS = isWeb4Bip() 
-    ? `
-    /* CSS selectors for web4.bip.com */
+    const textInputDescriptionCSS: string =
+    `
     .text-input, .message-input, .chat-input, textarea, input[type="text"], editor-paragraph, .editor-paragraph, #editor-paragraph {
       filter: blur(8px) opacity(0.25);
     }
     .text-input:hover, .message-input:hover, .chat-input:hover, textarea:hover, input[type="text"]:hover {
       filter: blur(0) opacity(1);
     }
-    `
-    : `
-    p.selectable-text.copyable-text.x15bjb6t.x1n2onr6 {
-      filter: blur(8px) opacity(0.25);
-    }
-    p.selectable-text.copyable-text.x15bjb6t.x1n2onr6:hover {
-      filter: blur(0) opacity(1);
-    }
     `;
-    const _toggleTextInputDescription = (status: boolean): void => {
+    const _toggleTextInputDescription: (status: boolean) => void = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
             const tabId: number = tabs[0].id!
@@ -282,29 +267,17 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }
 
-    // toggleMediaGalleryDescription
-    const profilePicDescriptionCSS = isWeb4Bip() 
-    ? `
-    /* CSS selectors for web4.bip.com */
-    .profile-pic, .avatar, .user-avatar, .profile-image, .user-pic, .user-image {
+    const profilePicDescriptionCSS: string =
+    `
+    ._avatar_1vdaa_1 {
       filter: blur(${settings.varStyles.ppBlur}px) grayscale(1);
       transition-delay: 0s;
     }
-    .profile-pic:hover, .avatar:hover, .user-avatar:hover, .profile-image:hover, .user-pic:hover, .user-image:hover {
+    ._avatar_1vdaa_1:hover {
       filter: blur(0) grayscale(0);
       transition-delay: 0s;
     }
     `
-    : `
-    img.HXaAiLkvrq44mN9RG2\\+rqw\\=\\=, .p-avatar {
-      filter: blur(${settings.varStyles.ppBlur}px) grayscale(1);
-      transition-delay: 0s;
-    }
-    img.HXaAiLkvrq44mN9RG2\\+rqw\\=\\=:hover, .p-avatar:hover {
-      filter: blur(0) grayscale(0);
-      transition-delay: 0s;
-    }
-    `;
     const _toggleProfilePicDescription = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
@@ -335,29 +308,23 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }
 
-    // toggleNameDescription
-    const nameDescriptionCSS = isWeb4Bip() 
-    ? `
-    /* CSS selectors for web4.bip.com */
-    .user-name, .username, .display-name, .chat-name, .contact-name, .name {
-      filter: blur(${settings.varStyles.nmBlur}px) grayscale(1);
-      transition-delay: 0s;
+    const nameDescriptionCSS: string =
+    `
+    div[class^="_contact__content__header__name_"],
+    span[class^="_message__nick_"],
+    div[class^="_username_"],
+    h3[class^="_info_card__title_"]
+    {
+      filter: blur(${settings.varStyles.mspBlur}px) grayscale(1);
     }
-    .user-name:hover, .username:hover, .display-name:hover, .chat-name:hover, .contact-name:hover, .name:hover {
+    div[class^="_contact__content__header__name_"]:hover,
+    span[class^="_message__nick_"]:hover,
+    div[class^="_username_"]:hover,
+    h3[class^="_info_card__title_"]:hover
+    {
       filter: blur(0) grayscale(0);
-      transition-delay: 0s;
     }
     `
-    : `
-    .i0NU-Cd1bsGmwNecf9i95g\\=\\= {
-      filter: blur(${settings.varStyles.nmBlur}px) grayscale(1);
-      transition-delay: 0s;
-    }
-    .i0NU-Cd1bsGmwNecf9i95g\\=\\=:hover {
-      filter: blur(0) grayscale(0);
-      transition-delay: 0s;
-    }
-    `;
     const _toggleNameDescription = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
