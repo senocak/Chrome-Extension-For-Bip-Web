@@ -31,7 +31,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
             wiBlur: 14,
         }
     }
-    const [settings, setSettings, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal('settings', defaultSettings);
+    const [settings, setSettings, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal('settings', defaultSettings)
 
     useEffect((): void => {
         chrome.action.setBadgeText({ text: count.toString() })
@@ -53,7 +53,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         const existingStyle = document.getElementById(styleId)
         if (existingStyle) {
             console.log(`Style with ID "${styleId}" already exists.`)
-            return;
+            return
         }
         const styleElement: HTMLStyleElement = document.createElement("style")
         styleElement.id = styleId
@@ -73,7 +73,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // Get CSS from centralized styles
-    const css = getCSS(settings);
+    const css = getCSS(settings)
 
     // toggleMessages
     const messagesCSS: string = css.messages
@@ -141,7 +141,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleMediaPreview
-    const mediaPreviewCSS: string = css.mediaPreview;
+    const mediaPreviewCSS: string = css.mediaPreview
     const _toggleMediaPreview: (status: boolean) => void = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
@@ -174,7 +174,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     }
 
     // toggleTextInputDescription
-    const textInputDescriptionCSS: string = css.textInput;
+    const textInputDescriptionCSS: string = css.textInput
     const _toggleTextInputDescription: (status: boolean) => void = (status: boolean): void => {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
             const tab: chrome.tabs.Tab = tabs[0]
@@ -269,62 +269,84 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }
 
-
-    useEffect(() => {
+    useEffect((): void => {
         // Load settings from chrome.storage.local on page load
-        chrome.storage.local.get('settings', (result) => {
+        chrome.storage.local.get('settings', (result): void => {
             if (result.settings) {
-                setSettings(result.settings); // Update state with stored settings
-
+                setSettings(result.settings) // Update state with stored settings
                 // Check if the current tab is web4.bip.com
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs: chrome.tabs.Tab[]): void {
-                    const tab: chrome.tabs.Tab = tabs[0];
+                    const tab: chrome.tabs.Tab = tabs[0]
                     if (tab.url && tab.url.includes('web4.bip.com')) {
-                        console.log("Applying CSS to web4.bip.com from stored settings");
-                        const tabId: number = tab.id!;
-
+                        console.log("Applying CSS to web4.bip.com from stored settings")
+                        const tabId: number = tab.id!
                         // Apply CSS based on stored settings
                         if (result.settings.styles.messages) {
                             chrome.scripting.executeScript({
                                 target: { tabId },
+                                func: removeCSSDirectly,
+                                args: ["toggleMessages"]
+                            })
+                            chrome.scripting.executeScript({
+                                target: { tabId },
                                 func: insertCSSDirectly,
                                 args: ["toggleMessages", messagesCSS]
-                            });
+                            })
                         }
-
                         if (result.settings.styles.messagesPreview) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: removeCSSDirectly,
+                                args: ["toggleMessagesPreview"]
+                            })
                             chrome.scripting.executeScript({
                                 target: { tabId },
                                 func: insertCSSDirectly,
                                 args: ["toggleMessagesPreview", messagesPreviewCSS]
-                            });
+                            })
                         }
-
                         if (result.settings.styles.mediaPreview) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: removeCSSDirectly,
+                                args: ["toggleMediaPreview"]
+                            })
                             chrome.scripting.executeScript({
                                 target: { tabId },
                                 func: insertCSSDirectly,
                                 args: ["toggleMediaPreview", mediaPreviewCSS]
-                            });
+                            })
                         }
-
                         if (result.settings.styles.textInput) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: removeCSSDirectly,
+                                args: ["toggleTextInputDescription"]
+                            })
                             chrome.scripting.executeScript({
                                 target: { tabId },
                                 func: insertCSSDirectly,
                                 args: ["toggleTextInputDescription", textInputDescriptionCSS]
-                            });
+                            })
                         }
-
                         if (result.settings.styles.profilePic) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: removeCSSDirectly,
+                                args: ["toggleProfilePicDescription"]
+                            })
                             chrome.scripting.executeScript({
                                 target: { tabId },
                                 func: insertCSSDirectly,
                                 args: ["toggleProfilePicDescription", profilePicDescriptionCSS]
-                            });
+                            })
                         }
-
                         if (result.settings.styles.name) {
+                            chrome.scripting.executeScript({
+                                target: { tabId },
+                                func: removeCSSDirectly,
+                                args: ["toggleNameDescription"]
+                            })
                             chrome.scripting.executeScript({
                                 target: { tabId },
                                 func: insertCSSDirectly,
@@ -356,20 +378,19 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              className="blur-input"
                              value={settings.varStyles.msBlur}
                              onChange={(event): void => {
-                                 const newValue = Number(event.target.value);
+                                 const newValue = Number(event.target.value)
                                  setSettings(prevSettings => ({
                                      ...prevSettings,
                                      varStyles: {...prevSettings.varStyles, msBlur: newValue}
-                                 }));
-
+                                 }))
                                  // Apply changes immediately
                                  if (settings.styles.messages && currentTab?.url?.includes('web4.bip.com')) {
-                                     const tabId = currentTab.id!;
+                                     const tabId: any = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
                                          func: insertCSSDirectly,
                                          args: ["toggleMessages", css.messages]
-                                     });
+                                     })
                                  }
                              }}
                              data-localetitle="msBlurInputDescription"/>
@@ -385,20 +406,19 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              className="blur-input"
                              value={settings.varStyles.mspBlur}
                              onChange={(event): void => {
-                                 const newValue = Number(event.target.value);
+                                 const newValue: number = Number(event.target.value)
                                  setSettings(prevSettings => ({
                                      ...prevSettings,
                                      varStyles: {...prevSettings.varStyles, mspBlur: newValue}
-                                 }));
-
+                                 }))
                                  // Apply changes immediately
                                  if (settings.styles.messagesPreview && currentTab?.url?.includes('web4.bip.com')) {
-                                     const tabId = currentTab.id!;
+                                     const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
                                          func: insertCSSDirectly,
                                          args: ["toggleMessagesPreview", css.messagesPreview]
-                                     });
+                                     })
                                  }
                              }}
                              data-localetitle="mspBlurInputDescription"/>
@@ -414,20 +434,19 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              className="blur-input"
                              value={settings.varStyles.mdpBlur}
                              onChange={(event): void => {
-                                 const newValue = Number(event.target.value);
+                                 const newValue: number = Number(event.target.value)
                                  setSettings(prevSettings => ({
                                      ...prevSettings,
                                      varStyles: {...prevSettings.varStyles, mdpBlur: newValue}
-                                 }));
-
+                                 }))
                                  // Apply changes immediately
                                  if (settings.styles.mediaPreview && currentTab?.url?.includes('web4.bip.com')) {
-                                     const tabId = currentTab.id!;
+                                     const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
                                          func: insertCSSDirectly,
                                          args: ["toggleMediaPreview", css.mediaPreview]
-                                     });
+                                     })
                                  }
                              }}
                              data-localetitle="mdpBlurInputDescription"/>
@@ -451,20 +470,19 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              className="blur-input"
                              value={settings.varStyles.ppBlur}
                              onChange={(event): void => {
-                                 const newValue = Number(event.target.value);
+                                 const newValue: number = Number(event.target.value)
                                  setSettings(prevSettings => ({
                                      ...prevSettings,
                                      varStyles: {...prevSettings.varStyles, ppBlur: newValue}
-                                 }));
-
+                                 }))
                                  // Apply changes immediately
                                  if (settings.styles.profilePic && currentTab?.url?.includes('web4.bip.com')) {
-                                     const tabId = currentTab.id!;
+                                     const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
                                          func: insertCSSDirectly,
                                          args: ["toggleProfilePicDescription", css.profilePic]
-                                     });
+                                     })
                                  }
                              }}
                              data-localetitle="ppSmBlurInputDescription"/>
@@ -480,20 +498,19 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              className="blur-input"
                              value={settings.varStyles.nmBlur}
                              onChange={(event): void => {
-                                 const newValue = Number(event.target.value);
+                                 const newValue: number = Number(event.target.value)
                                  setSettings(prevSettings => ({
                                      ...prevSettings,
                                      varStyles: {...prevSettings.varStyles, nmBlur: newValue}
-                                 }));
-
+                                 }))
                                  // Apply changes immediately
                                  if (settings.styles.name && currentTab?.url?.includes('web4.bip.com')) {
-                                     const tabId = currentTab.id!;
+                                     const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
                                          func: insertCSSDirectly,
                                          args: ["toggleNameDescription", css.name]
-                                     });
+                                     })
                                  }
                              }}
                              data-localetitle="nmBlurInputDescription"/>
