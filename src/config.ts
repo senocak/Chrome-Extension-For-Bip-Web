@@ -31,12 +31,26 @@ i18n
                     wiBlurInputLabel: "Blur amount",
                 },
             },
-            ar: {
+            tr: {
                 translation: {
-                    hello_world: "مرحباً بالعالم!",
+                    extensionToggle: "Aç/Kapat",
+                    extensionSettings: "Ayarlar",
+                    toggleMessages: "Sohbetteki Tüm Mesajlar",
+                    blurInputLabel: "Bulanıklık miktarı",
+                    toggleMessagesPreview: "Son Mesajlar Önizlemesi",
+                    toggleMediaPreview: "Medya önizlemesi",
+                    toggleMediaGallery: "Medya galerisi",
+                    toggleTextInput: "Metin girişi",
+                    toggleProfilePic: "Profil resimleri",
+                    ppSmBlurInputLabel: "Küçük boyut bulanıklık miktarı",
+                    ppBlurInputLabel: "Normal boyut bulanıklık miktarı",
+                    ppLgBlurInputLabel: "Büyük boyut bulanıklık miktarı",
+                    toggleName: "Grup/Kullanıcı adları",
+                    toggleBlurOnIdle: "Boştayken WhatsApp'ı Bulanıklaştır",
+                    itBlurInputLabel: "Boşta Kalma Süresi",
+                    wiBlurInputLabel: "Bulanıklık miktarı",
                 },
             },
         },
-    });
-
-export default i18n;
+    })
+export default i18n
