@@ -78,6 +78,14 @@ h2{
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transform: translateZ(0);
 }
+
+.header .version {
+    font-size: 12px;
+    color: #555;
+    margin-top: -5px;
+    opacity: 0.8;
+    font-weight: 500;
+}
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
