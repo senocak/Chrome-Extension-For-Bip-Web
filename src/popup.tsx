@@ -6,7 +6,7 @@ import {useChromeStorageLocal} from 'use-chrome-storage'
 import "./popup.css"
 import { getCSS } from './styles'
 import { Settings, CSSStyles } from './types'
-import packageJson from '../package.json'
+import manifestJson from '../public/manifest.json'
 
 const Popup: () => React.JSX.Element = (): React.JSX.Element => {
     const [currentTab, setCurrentTab] = useState<chrome.tabs.Tab |null>(null)
@@ -393,7 +393,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                       {t("extensionSettings")}
                   </a>
               </h1>
-              <div className="version">v{packageJson.version}</div>
+              <div className="version">v{manifestJson.version}</div>
           </div>
           {!isWeb4Bip() && (
             <div style={{
