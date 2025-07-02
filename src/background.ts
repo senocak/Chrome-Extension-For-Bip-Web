@@ -4,8 +4,8 @@ import {CSSStyles, Settings, StorageResult} from './types'
 
 // Helper function to update badge count
 const updateBadgeCount = (tab: chrome.tabs.Tab): void => {
-  // Check if the tab URL includes 'web4.bip.com'
-  const isWeb4Bip: boolean = tab.url?.includes('web4.bip.com') || false
+  // Check if the tab URL includes 'web.bip.com'
+  const isWeb4Bip: boolean = tab.url?.includes('web.bip.com') || false
 
   // Load settings from chrome.storage.local
   chrome.storage.local.get('settings', (result: StorageResult): void => {
@@ -13,7 +13,7 @@ const updateBadgeCount = (tab: chrome.tabs.Tab): void => {
       const settings: Settings = result.settings
       // Count enabled styles
       const enabledStylesCount = Object.values(settings.styles).filter(Boolean).length
-      // Set badge text based on whether the tab is web4.bip.com
+      // Set badge text based on whether the tab is web.bip.com
       chrome.action.setBadgeText({ text: isWeb4Bip ? enabledStylesCount.toString() : "X" })
       chrome.action.setBadgeBackgroundColor({ color: isWeb4Bip ? "#4285F4" : "#FF0000" })
     } else {
@@ -60,9 +60,9 @@ chrome.tabs.onUpdated.addListener(function (tabId: number, info: chrome.tabs.Tab
           // Update badge count for the updated tab
           updateBadgeCount(tab)
 
-          // Check if the tab URL includes 'web4.bip.com'
-          if (tab.url && tab.url.includes('web4.bip.com')) {
-              console.log("Detected web4.bip.com, applying CSS")
+          // Check if the tab URL includes 'web.bip.com'
+          if (tab.url && tab.url.includes('web.bip.com')) {
+              console.log("Detected web.bip.com, applying CSS")
 
               // Load settings from chrome.storage.local
               chrome.storage.local.get('settings', (result: StorageResult): void => {

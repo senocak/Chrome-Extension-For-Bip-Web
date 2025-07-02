@@ -41,7 +41,7 @@ export const getCSS = (settings: Partial<Settings>): CSSStyles => {
   return {
     // Messages CSS
     messages: `
-    /* CSS selectors for web4.bip.com */
+    /* CSS selectors for web.bip.com */
     div[itemtype="messages"] div[class^="_textBubble__card_info__message_container_"], 
     div[itemtype="messages"] div[class^="_textBubble__card_info__message_content_text_"], 
     div[itemtype="messages"] div[class^="video-element"], 

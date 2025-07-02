@@ -51,9 +51,9 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         })
     }, [])
 
-    // Check if the current tab is web4.bip.com
+    // Check if the current tab is web.bip.com
     const isWeb4Bip: () => boolean = (): boolean => {
-        return currentTab?.url?.includes('web4.bip.com') || false
+        return currentTab?.url?.includes('web.bip.com') || false
     }
 
     const insertCSSDirectly: (styleId: string, cssRules: string) => void = (styleId: string, cssRules: string): void => {
@@ -299,11 +299,11 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
         chrome.storage.local.get('settings', (result): void => {
             if (result.settings) {
                 setSettings(result.settings) // Update state with stored settings
-                // Check if the current tab is web4.bip.com
+                // Check if the current tab is web.bip.com
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs: chrome.tabs.Tab[]): void {
                     const tab: chrome.tabs.Tab = tabs[0]
-                    if (tab.url && tab.url.includes('web4.bip.com')) {
-                        console.log("Applying CSS to web4.bip.com from stored settings")
+                    if (tab.url && tab.url.includes('web.bip.com')) {
+                        console.log("Applying CSS to web.bip.com from stored settings")
                         const tabId: number = tab.id!
                         // Apply CSS based on stored settings
                         if (result.settings.styles.messages) {
@@ -406,7 +406,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
               textAlign: 'center',
               animation: 'fadeIn 0.5s ease-out'
             }}>
-              {t("notOnBipWeb") || "This extension only works on web4.bip.com"}
+              {t("notOnBipWeb") || "This extension only works on web.bip.com"}
             </div>
           )}
           {isWeb4Bip() && (
@@ -429,7 +429,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                                      varStyles: {...prevSettings.varStyles, msBlur: newValue}
                                  }))
                                  // Apply changes immediately
-                                 if (settings.styles.messages && currentTab?.url?.includes('web4.bip.com')) {
+                                 if (settings.styles.messages && currentTab?.url?.includes('web.bip.com')) {
                                      const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
@@ -457,7 +457,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                                      varStyles: {...prevSettings.varStyles, mspBlur: newValue}
                                  }))
                                  // Apply changes immediately
-                                 if (settings.styles.messagesPreview && currentTab?.url?.includes('web4.bip.com')) {
+                                 if (settings.styles.messagesPreview && currentTab?.url?.includes('web.bip.com')) {
                                      const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
@@ -485,7 +485,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                                      varStyles: {...prevSettings.varStyles, mdpBlur: newValue}
                                  }))
                                  // Apply changes immediately
-                                 if (settings.styles.mediaPreview && currentTab?.url?.includes('web4.bip.com')) {
+                                 if (settings.styles.mediaPreview && currentTab?.url?.includes('web.bip.com')) {
                                      const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
@@ -513,7 +513,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                                      varStyles: {...prevSettings.varStyles, wiBlur: newValue}
                                  }))
                                  // Apply changes immediately
-                                 if (settings.styles.textInput && currentTab?.url?.includes('web4.bip.com')) {
+                                 if (settings.styles.textInput && currentTab?.url?.includes('web.bip.com')) {
                                      const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
@@ -541,7 +541,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                                      varStyles: {...prevSettings.varStyles, ppBlur: newValue}
                                  }))
                                  // Apply changes immediately
-                                 if (settings.styles.profilePic && currentTab?.url?.includes('web4.bip.com')) {
+                                 if (settings.styles.profilePic && currentTab?.url?.includes('web.bip.com')) {
                                      const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },
@@ -569,7 +569,7 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                                      varStyles: {...prevSettings.varStyles, nmBlur: newValue}
                                  }))
                                  // Apply changes immediately
-                                 if (settings.styles.name && currentTab?.url?.includes('web4.bip.com')) {
+                                 if (settings.styles.name && currentTab?.url?.includes('web.bip.com')) {
                                      const tabId: number = currentTab.id!
                                      chrome.scripting.executeScript({
                                          target: { tabId },

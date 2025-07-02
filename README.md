@@ -1,10 +1,10 @@
 # Bip Web Privacy Extension
 
-A Chrome extension that applies blur effects to various elements on web4.bip.com for privacy.
+A Chrome extension that applies blur effects to various elements on web.bip.com for privacy.
 
 ## Features
 
-- Blurs messages, message previews, media previews, text inputs, profile pictures, and names on web4.bip.com
+- Blurs messages, message previews, media previews, text inputs, profile pictures, and names on web.bip.com
 - Configurable blur amount for each element type
 - Option to unblur elements on hover
 - Settings are persisted between sessions
@@ -70,7 +70,7 @@ npm run watch
 ## Usage
 
 1. Install the extension in Chrome
-2. Navigate to web4.bip.com
+2. Navigate to web.bip.com
 3. Click on the extension icon to open the popup
 4. Check the boxes for the elements you want to blur:
    - "All Messages in Chat" - Blurs all messages in the chat
@@ -82,7 +82,7 @@ npm run watch
    - "No transition delay" - Removes transition delay when hovering over blurred elements
    - "Unblur all on app hover" - Unblurs all elements when hovering over the app
 5. Adjust the blur amount for each element type using the sliders
-6. Your settings will be automatically saved and applied to web4.bip.com
+6. Your settings will be automatically saved and applied to web.bip.com
 
 ## Development
 
