@@ -1,6 +1,6 @@
 # 🔐 Bip Web Privacy Extension: Technical Architecture and Open-Source Journey
 
-In an era where digital privacy has become more crucial than ever, an **open-source** Chrome extension is changing how developers and users approach privacy on Bip Web. Meet the **Bip Web Privacy Extension** – a sophisticated, community-driven tool that demonstrates how modern web technologies can create elegant privacy solutions.
+In an era where digital privacy has become more crucial than ever, this **open-source** Chrome extension demonstrates how modern web technologies can create elegant privacy solutions for Bip Web users. Built entirely in the open with React, TypeScript, and Chrome's Manifest V3, this community-driven tool showcases best practices in extension development while solving real-world privacy challenges through intelligent blur effects and granular user controls.
 
 ## 🚀 The Open-Source Approach to Digital Privacy
 
@@ -113,7 +113,7 @@ This project serves as a **masterclass** in modern web development:
 - **⚛️ React 18 + TypeScript**: Type-safe component architecture
 - **🔧 Webpack Configuration**: Multi-environment build system
 - **🧪 Jest Testing Framework**: Comprehensive test coverage
-- **🌍 i18next Integration**: International accessibility
+- **🌍 Internationalization (i18next) Integration**: International accessibility
 - **📦 Chrome Storage API**: Persistent settings management
 - **🎨 CSS-in-JS Patterns**: Dynamic styling system
 
@@ -158,12 +158,15 @@ Getting started with contributions is straightforward:
 
 ```bash
 # Clone and setup
-git clone https://github.com/yourusername/Chrome-Extension-For-Bip-Web
+git clone https://github.com/senocak/Chrome-Extension-For-Bip-Web.git
 cd Chrome-Extension-For-Bip-Web
 npm install
 
 # Development with hot reload
 npm run watch
+
+# Testing
+npm test
 
 # Production build
 npm run build
@@ -171,8 +174,7 @@ npm run build
 # Run tests
 npm test
 
-# Code formatting
-npm run style
+npm run build
 ```
 
 ## 🎯 Real-World Impact for Privacy-Conscious Users
@@ -217,7 +219,7 @@ This project is perfect for developers wanting to learn:
 - Internationalization with i18next
 - Modern build tooling with Webpack
 
-## 💡 The Open-Source Privacy Movement
+## 💡The Open-Source Privacy Movement
 
 This extension represents more than just code – it's a statement about **transparent privacy tools**. In an ecosystem dominated by closed-source privacy solutions, this project proves that:
 
