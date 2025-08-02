@@ -119,14 +119,12 @@ export const getCSS = (settings: Partial<Settings>): CSSStyles => {
 
     // Profile Picture CSS
     profilePic: `
-    div[class^="_avatar_"],
-    ._avatar_1vdaa_1
+    img[class="avatar"]
     {
       filter: blur(${varStyles.ppBlur}px) grayscale(1);
       transition-delay: 0s;
     }
-    ._avatar_1vdaa_1:hover,
-    div[class^="_avatar_"]:hover
+    img[class="avatar"]:hover
     {
       filter: blur(0) grayscale(0);
       transition-delay: 0s;

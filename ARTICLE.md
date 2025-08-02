@@ -108,6 +108,21 @@ The extension showcases modern Chrome extension architecture with Manifest V3:
 }
 ```
 
+### This extension is capable of:
+- Blurring messages, message previews, media previews, names, profile pictures, and text input fields on Bip Web.
+- Unblurring elements on hover for quick access.
+- Allowing users to customize privacy settings and blur intensities for each element. 
+- Dynamically injecting CSS based on user preferences for privacy layers. 
+- Providing a React-powered popup interface for granular control. 
+- Persisting settings using Chrome Storage API. 
+- Displaying real-time badge updates to indicate active privacy layers. 
+- Supporting internationalization (i18next). 
+- Enabling easy contribution and extensibility for new privacy features, profiles, and platforms.
+
+## 🔍 ScreenShots & Visuals
+<img src="img1.png" alt="Popup Interface">
+<img src="img2.png" alt="Blurred Messages">
+
 ## 🌟 Open-Source Excellence: Learn, Contribute, Innovate
 ### **Modern Development Stack**
 This project serves as a **masterclass** in modern web development:
@@ -164,6 +179,9 @@ npm test
 
 # Development with hot reload
 npm run watch
+
+# Clean build artifacts
+npm run clean 
 
 # Production build
 npm run build
