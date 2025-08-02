@@ -23,13 +23,13 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
             textInput: false,
         },
         varStyles: {
-            msBlur: 8,
-            mspBlur: 8,
-            mdgBlur: 20,
-            mdpBlur: 20,
-            nmBlur: 5,
-            ppBlur: 8,
-            wiBlur: 14,
+            msBlur: 8,    // Message blur intensity
+            mspBlur: 8,   // Message preview blur
+            mdgBlur: 20,  // Media blur (high privacy)
+            mdpBlur: 20,  // Media preview blur
+            nmBlur: 5,    // Name blur (subtle)
+            ppBlur: 8,    // Profile picture blur
+            wiBlur: 14,   // Text input blur
         }
     }
     const [settings, setSettings, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal('settings', defaultSettings)
