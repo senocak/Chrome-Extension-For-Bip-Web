@@ -105,12 +105,12 @@ export const getCSS = (settings: Partial<Settings>): CSSStyles => {
 
     // Text Input CSS
     textInput: `
-    .editor-paragraph,
+    .editor-input,
     input
     {
       filter: blur(${varStyles.wiBlur}px) grayscale(1);
     }
-    .editor-paragraph:hover,
+    .editor-input:hover,
     input:hover
     {
       filter: blur(0) grayscale(0);
@@ -119,12 +119,12 @@ export const getCSS = (settings: Partial<Settings>): CSSStyles => {
 
     // Profile Picture CSS
     profilePic: `
-    img[class="avatar"]
+    .avatar-wrap
     {
       filter: blur(${varStyles.ppBlur}px) grayscale(1);
       transition-delay: 0s;
     }
-    img[class="avatar"]:hover
+    .avatar-wrap:hover
     {
       filter: blur(0) grayscale(0);
       transition-delay: 0s;
