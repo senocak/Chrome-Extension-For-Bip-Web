@@ -291,7 +291,46 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
             })
 
             // Reset settings to default
-            setSettings(defaultSettings)
+            setSettings({
+                ...defaultSettings,
+                on: false
+            })
+        })
+    }
+
+    const _toggleAll = (status: boolean): void => {
+        setSettings(prevSettings => ({
+            ...prevSettings,
+            on: status,
+            styles: {
+                messages: status,
+                messagesPreview: status,
+                mediaPreview: status,
+                name: status,
+                profilePic: status,
+                textInput: status,
+            }
+        }))
+
+        chrome.tabs.query({active: true, currentWindow: true}, function (tabs: chrome.tabs.Tab[]): void {
+            const tab: chrome.tabs.Tab = tabs[0]
+            const tabId: number = tab.id!
+
+            if (status) {
+                // Enable all CSS
+                chrome.scripting.executeScript({ target: { tabId }, func: insertCSSDirectly, args: ["toggleMessages", css.messages] })
+                chrome.scripting.executeScript({ target: { tabId }, func: insertCSSDirectly, args: ["toggleMessagesPreview", css.messagesPreview] })
+                chrome.scripting.executeScript({ target: { tabId }, func: insertCSSDirectly, args: ["toggleMediaPreview", css.mediaPreview] })
+                chrome.scripting.executeScript({ target: { tabId }, func: insertCSSDirectly, args: ["toggleTextInputDescription", css.textInput] })
+                chrome.scripting.executeScript({ target: { tabId }, func: insertCSSDirectly, args: ["toggleProfilePicDescription", css.profilePic] })
+                chrome.scripting.executeScript({ target: { tabId }, func: insertCSSDirectly, args: ["toggleNameDescription", css.name] })
+            } else {
+                // Disable all CSS
+                const styleIds = ["toggleMessages", "toggleMessagesPreview", "toggleMediaPreview", "toggleTextInputDescription", "toggleProfilePicDescription", "toggleNameDescription"]
+                styleIds.forEach(styleId => {
+                    chrome.scripting.executeScript({ target: { tabId }, func: removeCSSDirectly, args: [styleId] })
+                })
+            }
         })
     }
 
@@ -413,6 +452,22 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
           )}
           {isWeb4Bip() && (
             <div id="mainContent">
+              <div className="master-controls">
+                <div className="master-toggle-container">
+                    <span className="master-toggle-label">{t("toggleAll")}</span>
+                    <input type="checkbox" id="masterToggle" 
+                           checked={settings.on}
+                           onChange={(): void => _toggleAll(!settings.on)}
+                    />
+                    <label htmlFor="masterToggle"></label>
+                </div>
+                <button 
+                    className="reset-button-small" 
+                    onClick={_resetSettings}
+                >
+                    {t("resetButton")}
+                </button>
+              </div>
               <ul>
                   <li>
                       {t("toggleMessages")}
@@ -583,14 +638,6 @@ const Popup: () => React.JSX.Element = (): React.JSX.Element => {
                              data-localetitle="nmBlurInputDescription"/>
                   </li>
               </ul>
-              <div className="reset-button-container">
-                  <button 
-                      className="reset-button" 
-                      onClick={_resetSettings}
-                  >
-                      {t("resetButton")}
-                  </button>
-              </div>
             </div>
           )}
       </>
